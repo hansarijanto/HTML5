@@ -23,9 +23,10 @@ function animate(time) {
 
   fps = calculateFps( time );
 
-	context.clearRect(0,0,canvas.width,canvas.height);
+	context.clearRect( 0, 0, canvas.width, canvas.height );
 
-	player.update( context, time );
+	player.update( context, time, background, fps, canvas );
+	background.draw( context );
 	player.paint( context );
 
 	window.requestNextAnimationFrame( animate );
@@ -36,6 +37,8 @@ function animate(time) {
 var canvas  = document.getElementById( 'canvas' ),
     context = canvas.getContext( '2d' ),
 		player  = initializePlayer(),
+		
+		background = new Background(),
 
     lastTime 			= 0,
     lastFpsUpdate = { time: 0, value: 0 },
@@ -47,9 +50,13 @@ context.lineWidth = 0.5;
 // Listeners
 window.addEventListener("keydown", function(e) 
 {
-	if( e.keyCode == 37 || e.keyCode == 39 )
+	if( e.keyCode == 39 )
 	{
-		player.run();
+		player.run( true );
+	}
+	else if( e.keyCode == 37 )
+	{
+		player.run( false );
 	}
 	else if( e.keyCode == 32 )
 	{

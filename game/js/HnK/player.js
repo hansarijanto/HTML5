@@ -2,6 +2,7 @@ var Player = function ( name, posX, posY, sprite, collider )
 {	
 	this.thing     = new Thing( name, posX, posY, sprite, collider );	
 	this.jumpTimer = new AnimationTimer( 400 );
+	
 	return this;
 };
 
@@ -13,6 +14,7 @@ Player.prototype =
   spriteAdvanceRate   : 100,
 	lastSpriteAdvance		: 0,
 	velocityY           : 170,
+	velocityX           : 170,
 
 	jumping             : false,
 	jumpTimer           : null,
@@ -21,8 +23,9 @@ Player.prototype =
 	falling							: false,
 	
 	running             : false,
+	runningForward      : true,
 
-	update: function ( context, time )
+	update: function ( context, time, background, fps, canvas )
 	{
 		// Falling
 		if ( this.falling )
@@ -47,7 +50,8 @@ Player.prototype =
 		
 		if ( this.running )
 		{
-			// Move Background
+			if ( this.runningForward ) background.update( this.velocityX, fps, canvas  );
+			else 											 background.update( -this.velocityX, fps, canvas );
 		}
 		
 		// Jumping
@@ -90,7 +94,7 @@ Player.prototype =
 		return this.thing.sprite.curAnimName;
 	},
 	
-	run: function ()
+	run: function ( forward )
 	{
 		if( !this.running )
 		{
@@ -98,7 +102,8 @@ Player.prototype =
 			{
 				this.thing.sprite.setAnim( 'run' );
 			}
-			this.running = true;
+			this.runningForward = forward;
+			this.running        = true;
 		}
 	},
 	
@@ -113,8 +118,7 @@ Player.prototype =
 	{
 		if ( !this.jumping && !this.falling )
 		{
-			if ( this.getCurAnimName() != 'jump' ) this.thing.sprite.setAnim( 'jump' );
-			
+			this.thing.sprite.setAnim( 'jump' );
 			this.jumpTimer.start();	
 			this.initialJumpHeight = this.thing.posY;
 			this.jumping           = true;
