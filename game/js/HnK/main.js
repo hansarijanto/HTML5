@@ -47,7 +47,7 @@ context.lineWidth = 0.5;
 // Listeners
 window.addEventListener("keydown", function(e) 
 {
-	if( e.keyCode == 39 || e.keyCode == 37 )
+	if( e.keyCode == 37 || e.keyCode == 39 )
 	{
 		player.run();
 	}
@@ -59,7 +59,7 @@ window.addEventListener("keydown", function(e)
 
 window.addEventListener("keyup", function(e) 
 {
-	if( e.keyCode == 39 || e.keyCode == 37 )
+	if( e.keyCode == 37 || e.keyCode == 39 )
 	{
 		player.idle();
 	}

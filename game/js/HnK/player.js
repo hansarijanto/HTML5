@@ -1,31 +1,78 @@
 var Player = function ( name, posX, posY, sprite, collider ) 
 {	
-	this.thing      = new Thing( name, posX, posY, sprite, collider );	
-	this.jump_timer = new AnimationTimer( 300 );
+	this.thing     = new Thing( name, posX, posY, sprite, collider );	
+	this.jumpTimer = new AnimationTimer( 400 );
 	return this;
 };
 
 Player.prototype = 
 {
 	thing               : null,
-	lastSpriteAdvance   : 0,
+	lastUpdate					: 0,
+	
   spriteAdvanceRate   : 100,
-	velocityY           : 100,
+	lastSpriteAdvance		: 0,
+	velocityY           : 170,
 
 	jumping             : false,
 	jumpTimer           : null,
 	initialJumpHeight   : 0,
+	
+	falling							: false,
+	
+	running             : false,
 
 	update: function ( context, time )
 	{
-		this.setSpriteAdvanceRate();
+		// Falling
+		if ( this.falling )
+		{
+			// TODO::Stop falling when a collision is made with a ground object
+			if ( this.thing.posY < this.initialJumpHeight )
+			{
+				this.thing.posY += this.velocityY * ( ( time - this.lastUpdate ) / 1000 );
+			}
+			else 
+			{
+				if ( this.thing.posY > this.initialJumpHeight ) 
+				{
+					this.thing.posY = this.initialJumpHeight;
+				}
+				this.falling = false;
+				
+				if ( this.running ) this.thing.sprite.setAnim( 'run' );
+				else this.idle(); 
+			}
+		}
+		
+		if ( this.running )
+		{
+			// Move Background
+		}
+		
+		// Jumping
+		if ( this.jumping )
+		{
+			this.thing.posY -= this.velocityY * ( ( time - this.lastUpdate ) / 1000 );
+			if ( this.jumpTimer.isOver() )
+			{
+				this.jumping = false;
+				this.jumpTimer.reset();
+				
+				this.fall();
+			}
+		}
 		
 		// Advancing Sprite	
+		this.setSpriteAdvanceRate();
+		
     if ( time - this.lastSpriteAdvance > this.spriteAdvanceRate ) 
 		{
        this.thing.sprite.advance();
        this.lastSpriteAdvance = time;
     }
+
+		this.lastUpdate = time;
 	},
 	
 	paint: function ( context )
@@ -45,20 +92,38 @@ Player.prototype =
 	
 	run: function ()
 	{
-		// Have to move the background based on running direction
-		if ( this.getCurAnimName() != 'run' ) this.thing.sprite.setAnim( 'run' );
+		if( !this.running )
+		{
+			if ( this.getCurAnimName() != 'run' && this.getCurAnimName() != 'jump' )
+			{
+				this.thing.sprite.setAnim( 'run' );
+			}
+			this.running = true;
+		}
 	},
 	
 	idle: function ()
 	{
 		// Neutralize all other actions
 		this.thing.sprite.setAnim( 'idle' );
+		this.running = false;
 	},
 	
 	jump: function ()
 	{
-		// Make player jump
-		this.thing.sprite.setAnim( 'jump' );
-		jumping = true;
+		if ( !this.jumping && !this.falling )
+		{
+			if ( this.getCurAnimName() != 'jump' ) this.thing.sprite.setAnim( 'jump' );
+			
+			this.jumpTimer.start();	
+			this.initialJumpHeight = this.thing.posY;
+			this.jumping           = true;
+		}
+	},
+	
+	fall: function ()
+	{
+		this.thing.sprite.setAnim( 'fall' );
+		this.falling = true;
 	}
 };
