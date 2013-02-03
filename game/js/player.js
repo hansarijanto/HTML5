@@ -149,7 +149,7 @@ Player.prototype =
 	{
 		if( !this.running )
 		{
-			if ( this.getCurAnimName() != 'run' && this.getCurAnimName() != 'jump' && this.getCurAnimName() != 'fall' )
+			if ( this.getCurAnimName() != 'run' && this.getCurAnimName() != 'jump' && this.getCurAnimName() != 'fall' && this.getCurAnimName() != 'jumpAtk' && this.getCurAnimName() != 'fallAtk' )
 			{
 				this.thing.sprite.setAnim( 'run', true );
 			}
