@@ -1,7 +1,10 @@
-var Player = function ( name, posX, posY, sprite, collider ) 
+var Player = function ( name, posX, posY, sprite, type ) 
 {	
-	this.thing     = new Thing( name, posX, posY, sprite, collider );	
-	this.jumpTimer = new AnimationTimer( 400 );
+	collision       = new Collision( sprite.getCurCell() );
+	this.thing      = new Thing( name, posX, posY, sprite, type, collision );	
+	this.jumpTimer  = new AnimationTimer( 500 );
+	this.hitTimer   = new AnimationTimer( 300 );
+	this.deadTimer  = new AnimationTimer( 1000 );
 	
 	return this;
 };
@@ -10,6 +13,11 @@ Player.prototype =
 {
 	thing               : null,
 	lastUpdate					: 0,
+	hit		 							: false,
+	hitDirection        : null,
+	alive               : true,
+	
+	hp 									: 100,
 	
   spriteAdvanceRate   : 100,
 	lastSpriteAdvance		: 0,
@@ -25,54 +33,90 @@ Player.prototype =
 	running             : false,
 	runningForward      : true,
 
-	update: function ( context, time, background, fps, canvas )
+	update: function ( context, time, background, fps, canvas, enemy )
 	{
-		// Falling
-		if ( this.falling )
+		if ( this.alive )
 		{
-			// TODO::Stop falling when a collision is made with a ground object
-			if ( this.thing.posY < this.initialJumpHeight )
+			// Falling
+			if ( this.falling )
 			{
-				this.thing.posY += this.velocityY * ( ( time - this.lastUpdate ) / 1000 );
-			}
-			else 
-			{
-				if ( this.thing.posY > this.initialJumpHeight ) 
+				// TODO::Stop falling when a collision is made with a ground object
+				if ( this.thing.posY < this.initialJumpHeight )
 				{
-					this.thing.posY = this.initialJumpHeight;
+					this.thing.posY += this.velocityY * ( ( time - this.lastUpdate ) / 1000 );
 				}
-				this.falling = false;
+				else 
+				{
+					if ( this.thing.posY > this.initialJumpHeight ) 
+					{
+						this.thing.posY = this.initialJumpHeight;
+					}
+					this.falling = false;
 				
-				if ( this.running ) this.thing.sprite.setAnim( 'run' );
-				else this.idle(); 
+					if ( this.running ) this.thing.sprite.setAnim( 'run' );
+					else this.idle(); 
+				}
 			}
-		}
 		
-		if ( this.running )
-		{
-			if ( this.runningForward ) background.update( this.velocityX, fps, canvas  );
-			else 											 background.update( -this.velocityX, fps, canvas );
-		}
-		
-		// Jumping
-		if ( this.jumping )
-		{
-			this.thing.posY -= this.velocityY * ( ( time - this.lastUpdate ) / 1000 );
-			if ( this.jumpTimer.isOver() )
+			// Running		
+			if ( this.running )
 			{
-				this.jumping = false;
-				this.jumpTimer.reset();
+				if ( this.runningForward ) background.update( this.velocityX, fps, canvas, enemy  );
+				else 											 background.update( -this.velocityX, fps, canvas, enemy );
+			}
+		
+			// Jumping
+			if ( this.jumping )
+			{
+				this.thing.posY -= this.velocityY * ( ( time - this.lastUpdate ) / 1000 );
+				if ( this.jumpTimer.isOver() )
+				{
+					this.jumping = false;
+					this.jumpTimer.reset();
 				
-				this.fall();
+					this.fall();
+				}
+			}
+		
+			// Hit
+			if ( this.hit )
+			{
+				if ( this.hitDirection == 'right' )
+				{
+					background.update( -this.velocityX, fps, canvas, enemy  );
+				}
+				else if ( this.hitDirection == 'left' )
+				{
+					background.update( this.velocityX, fps, canvas, enemy  );
+				}
+			
+				if ( this.hitTimer.isOver() )
+				{
+					this.hit = false;
+					this.hitTimer.reset();
+					this.idle();
+				}
 			}
 		}
-		
+		else
+		{
+			if ( this.deadTimer.isOver() )
+			{
+				this.deadTimer.reset();
+				this.reset();
+				enemy.reset();
+				background.reset();				
+			}
+		}
+				
 		// Advancing Sprite	
 		this.setSpriteAdvanceRate();
 		
     if ( time - this.lastSpriteAdvance > this.spriteAdvanceRate ) 
 		{
+			 //TODO:: replicate code in enemy.js. move the function to thing.js
        this.thing.sprite.advance();
+			 this.thing.collision.update( this.thing.sprite.getCurCell() );
        this.lastSpriteAdvance = time;
     }
 
@@ -80,8 +124,15 @@ Player.prototype =
 	},
 	
 	paint: function ( context )
-	{
+	{		
 		this.thing.paint( context );
+		
+		// TODO::testing purpose drawing health bar
+		context.save();
+		context.fillStyle = "black";
+	  context.font = "bold 16px Arial";
+	  context.fillText("Health "+this.hp, 100, 100);
+		context.restore();
 	},
 	
 	setSpriteAdvanceRate: function ()
@@ -98,7 +149,7 @@ Player.prototype =
 	{
 		if( !this.running )
 		{
-			if ( this.getCurAnimName() != 'run' && this.getCurAnimName() != 'jump' )
+			if ( this.getCurAnimName() != 'run' && this.getCurAnimName() != 'jump' && this.getCurAnimName() != 'fall' )
 			{
 				this.thing.sprite.setAnim( 'run' );
 			}
@@ -110,7 +161,10 @@ Player.prototype =
 	idle: function ()
 	{
 		// Neutralize all other actions
-		this.thing.sprite.setAnim( 'idle' );
+		if( !this.jumping && !this.falling )
+		{
+			this.thing.sprite.setAnim( 'idle' );
+		}
 		this.running = false;
 	},
 	
@@ -129,5 +183,38 @@ Player.prototype =
 	{
 		this.thing.sprite.setAnim( 'fall' );
 		this.falling = true;
+	},
+	
+	damage: function ( direction )
+	{
+		if ( !this.hit )
+		{
+			this.hitDirection = direction;
+			this.hp -= 5;
+			
+			if( this.hp < 0 ) this.hp = 0;
+			
+			if ( this.hp <= 0 && this.alive )
+			{
+				this.alive = false;
+				this.thing.sprite.setAnim( 'dead' );
+				this.deadTimer.start();
+			}
+			else
+			{
+				this.thing.sprite.setAnim( 'hit' );
+				this.hitTimer.start();
+				this.hit = true;
+				this.running = false;
+			}
+		}
+	},
+	reset: function ()
+	{
+		this.hp = 100;
+		this.thing.posX = playerPosX;
+		this.thing.posY = playerPosY;
+		this.alive = true;
+		this.idle();
 	}
 };

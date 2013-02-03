@@ -8,13 +8,29 @@ function calculateFps( now )
 
 function initializePlayer()
 {
-	var playerSprite 		= new getPlayerSprite();
-	var player 					= new Player( 'player', 500, 380, playerSprite, null )
+	var playerSprite = new getPlayerSprite();
+	var player 			 = new Player( 'player', playerPosX, playerPosY, playerSprite, 'player' );
 	
 	return player;
 }
 
-function animate(time) {
+function initializeEnemy()
+{
+	var enemySprite = new getEnemy1Sprite();
+	var enemy 			= new Enemy( 'enemy', enemyPosX, enemyPosY, enemySprite, 'enemy' );
+	
+	return enemy;
+}
+
+function initializeCollisionManager()
+{
+	var collisionManager = new CollisionManager( player, enemy, null );
+	
+	return collisionManager;
+}
+
+function animate( time ) 
+{
 	
 	if ( time === undefined ) 
 	{
@@ -25,9 +41,12 @@ function animate(time) {
 
 	context.clearRect( 0, 0, canvas.width, canvas.height );
 
-	player.update( context, time, background, fps, canvas );
+	player.update( context, time, background, fps, canvas, enemy );
+	enemy.update( context, time, background, fps, canvas, enemy );
 	background.draw( context );
 	player.paint( context );
+	enemy.paint( context );
+	collisionManager.hasPlayerCollided( context );
 
 	window.requestNextAnimationFrame( animate );
 }
@@ -37,6 +56,8 @@ function animate(time) {
 var canvas  = document.getElementById( 'canvas' ),
     context = canvas.getContext( '2d' ),
 		player  = initializePlayer(),
+		enemy   = initializeEnemy(),
+		collisionManager = initializeCollisionManager(),
 		
 		background = new Background(),
 
@@ -47,28 +68,35 @@ var canvas  = document.getElementById( 'canvas' ),
 context.strokeStyle = 'lightgray';
 context.lineWidth = 0.5;
 
-// Listeners
+// Controls
+
 window.addEventListener("keydown", function(e) 
-{
-	if( e.keyCode == 39 )
+{	
+	if( !player.hit && player.alive )
 	{
-		player.run( true );
-	}
-	else if( e.keyCode == 37 )
-	{
-		player.run( false );
-	}
-	else if( e.keyCode == 32 )
-	{
-		player.jump();
+		if( e.keyCode == 39 )
+		{
+			player.run( true );
+		}
+		else if( e.keyCode == 37 )
+		{
+			player.run( false );
+		}
+		else if( e.keyCode == 32 )
+		{
+			player.jump();
+		}
 	}
 }, true);
 
 window.addEventListener("keyup", function(e) 
 {
-	if( e.keyCode == 37 || e.keyCode == 39 )
+	if( !player.hit && player.alive )
 	{
-		player.idle();
+		if( e.keyCode == 37 || e.keyCode == 39 )
+		{
+			player.idle();
+		}
 	}
 }, true);
 

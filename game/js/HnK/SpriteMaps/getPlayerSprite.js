@@ -49,12 +49,23 @@ var getPlayerSprite = function ()
 		// Attacking Falling Sprite
 		// { left: 152, top: 120, width: 30, height: 38 },
 	];
+	hitAnimation =
+	[
+		{ left: 72, top: 318, width: 29, height: 34 },
+		{ left: 105, top: 318, width: 32, height: 34 },
+	];
+	deadAnimation =
+	[
+		{ left: 105, top: 318, width: 32, height: 34 },
+	];
 	
 	animations = new Array();
 	animations['run' ] = runningAnimation;
 	animations['idle'] = idleAnimation;
 	animations['fall'] = fallAnimation;
 	animations['jump'] = jumpAnimation;
+	animations['hit' ] = hitAnimation;
+	animations['dead'] = deadAnimation;
 	
 	return new Sprite( spritesheet, animations );
 };

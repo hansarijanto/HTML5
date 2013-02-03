@@ -31,11 +31,11 @@ Sprite.prototype = {
 	{
 		 if( context == undefined ) alert( 'context in sprite,js paint is undefined' );
 		
-     var cell = this.curAnim[ this.cellIndex ];
-     context.drawImage(spritesheet, cell.left  , cell.top,
-                                    cell.width , cell.height,
-                                    left			 , top,
-                                    cell.width , cell.height);
+     var cell = this.getCurCell();
+     context.drawImage(this.spritesheet, cell.left  , cell.top,
+		                                     cell.width , cell.height,
+		                                     left			 , top,
+		                                     cell.width , cell.height);
   },
 
 	setAnim: function ( anim )
@@ -50,5 +50,10 @@ Sprite.prototype = {
 		{
 			alert( 'animation '+anim+' does not exist' );
 		}
+	},
+	
+	getCurCell: function ()
+	{
+		return this.curAnim[ this.cellIndex ];
 	}
 };

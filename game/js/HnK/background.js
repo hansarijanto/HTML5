@@ -8,7 +8,6 @@ Background.prototype =
 {
 	backgroundImage  : new Image(),
 	backgroundOffset : 0,
-	backgroundOffset : 0,
 	backgroundWidth  : 1000,
 	curPosition      : 0,
 
@@ -34,13 +33,20 @@ Background.prototype =
 		// context.restore();
 	},
 
-	update: function ( velocity, fps, canvas ) 
+	update: function ( velocity, fps, canvas, enemy ) 
 	{
 		distanceMoved = velocity / fps;
+		distanceMoved = Math.round( distanceMoved );
 		if ( this.curPosition + distanceMoved > 0 && this.curPosition + distanceMoved < this.backgroundWidth )
 		{
+			enemy.backgroundUpdate( -distanceMoved );
 			this.backgroundOffset = this.backgroundOffset < canvas.width ? this.backgroundOffset + velocity / fps : 0;
 			this.curPosition += velocity / fps;						
 		}
+	},
+	reset: function()
+	{
+		this.backgroundOffset = 0;
+		this.curPosition      = 0;
 	}
 };
