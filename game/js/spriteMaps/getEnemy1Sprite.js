@@ -1,7 +1,7 @@
 var getEnemy1Sprite = function ()
 {
 	enemy1spritesheet 		= new Image(),
-	enemy1spritesheet.src = '../../image/enemy_1.png'; 
+	enemy1spritesheet.src = 'image/enemy_1.png'; 
 	
 	idleAnimation = 
 	[

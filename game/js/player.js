@@ -1,134 +1,220 @@
-var spritesheet = new Image(),
-		GROUND = 380,
-		JUMP_HEIGHT = 340,
-		jumping = false,
-		falling = false,
-		walking = null,
-		runnerCells = [
-		  { left: 319, top: 19, width: 30, height: 34 },
-			{ left: 350, top: 19, width: 20, height: 34 },
-			{ left: 371, top: 19, width: 23, height: 34 },
-			{ left: 394, top: 19, width: 32, height: 34 },
-			{ left: 426, top: 19, width: 34, height: 34 },
-			{ left: 460, top: 19, width: 29, height: 34 },
-			{ left: 486, top: 19, width: 25, height: 34 },
-			{ left: 511, top: 19, width: 25, height: 34 },
-			{ left: 539, top: 19, width: 30, height: 34 },
-			{ left: 569, top: 19, width: 35, height: 34 },
-			{ left: 604, top: 19, width: 29, height: 34 },
-		],
-		idleCells = [
-			{ left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-		  { left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-		  { left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-		  { left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-		  { left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-			{ left: 213, top: 18, width: 30, height: 34 },
-		  { left: 213, top: 18, width: 30, height: 34 },
-			{ left: 247, top: 18, width: 30, height: 34 },
-			{ left: 281, top: 18, width: 30, height: 34 },
-		],
-		jumpCells = [
-			{ left: 152, top: 120, width: 30, height: 38 },
-		];
+var Player = function ( name, posX, posY, sprite, type ) 
+{	
+	collision       = new Collision( sprite.getCurCell() );
+	this.thing      = new Thing( name, posX, posY, sprite, type, collision );	
+	this.jumpTimer  = new AnimationTimer( 500 );
+	this.hitTimer   = new AnimationTimer( 300 );
+	this.deadTimer  = new AnimationTimer( 1000 );
+	
+	return this;
+};
 
-// Behaviors.................................................
+Player.prototype = 
+{
+	thing               : null,
+	lastUpdate					: 0,
+	hit		 							: false,
+	hitDirection        : null,
+	alive               : true,
+	
+	hp 									: 100,
+	
+  spriteAdvanceRate   : 100,
+	lastSpriteAdvance		: 0,
+	velocityY           : 170,
+	velocityX           : 170,
 
-    spriteAnimationLoop = {
-       lastAdvance: 0,
-       PAGEFLIP_INTERVAL: 100,
+	jumping             : false,
+	jumpTimer           : null,
+	initialJumpHeight   : 0,
+	
+	falling							: false,
+	
+	running             : false,
+	runningForward      : true,
 
-       execute: function (sprite, context, time) {
-          if (time - this.lastAdvance > this.PAGEFLIP_INTERVAL) {
-             sprite.painter.advance();
-             this.lastAdvance = time;
-          }
-       }
-    },
-
-		jump = {
-		   lastJump: 0,
-			 height: JUMP_HEIGHT,
-		       
-		       execute: function (sprite, context, time) {
-		         if ( jumping ) 
-						 {
-							
-		           sprite.top -= sprite.velocityY *
-		                          ((time - this.lastJump) / 1000);
-									
-							 if ( jump_timer.isOver() )
-							 {
-							  	jumping = false;
-									falling = true;
-							 }
-		         }
-		         this.lastJump = time;
-		       }
-		    },
+	update: function ( context, time, background, fps, canvas, enemy )
+	{
+		if ( this.alive )
+		{
+			// Falling
+			if ( this.falling )
+			{
+				// TODO::Stop falling when a collision is made with a ground object
+				if ( this.thing.posY < this.initialJumpHeight )
+				{
+					this.thing.posY += this.velocityY * ( ( time - this.lastUpdate ) / 1000 );
+				}
+				else 
+				{
+					if ( this.thing.posY > this.initialJumpHeight ) 
+					{
+						this.thing.posY = this.initialJumpHeight;
+					}
+					this.falling = false;
+				
+					if ( this.running ) this.thing.sprite.setAnim( 'run' );
+					else this.idle(); 
+				}
+			}
 		
-		fall = {
-				lastFall: 0,
-		        execute: function (sprite, context, time) {
-								if ( falling ) 
-								{
-									sprite.top += sprite.velocityY * ((time - this.lastFall) / 1000);
-									if( sprite.top > GROUND )
-									{
-										sprite.top = GROUND;
-										falling = false;
-									}
-								}
-								this.lastFall = time;
-				     	}
-				    },
+			// Running		
+			if ( this.running )
+			{
+				if ( this.runningForward ) background.update( this.velocityX, fps, canvas, enemy  );
+				else 											 background.update( -this.velocityX, fps, canvas, enemy );
+			}
 		
-
-    // moveRightToLeft = {
-    //    lastMove: 0,
-    //    
-    //    execute: function (sprite, context, time) {
-    //      if (this.lastMove !== 0) {
-    //        sprite.left += sprite.velocityX *
-    //                       ((time - this.lastMove) / 1000); 
-    // 
-    //        if (sprite.left > canvas.width) {
-    //           sprite.left = 0;
-    //        }
-    //      }
-    //      this.lastMove = time;
-    //    }
-    // },
-
-// Painters....................................................
-
-    idle_painter = new SpriteSheetPainter(idleCells);
-
-		runner_painter = new SpriteSheetPainter(runnerCells);
-
-		jumping_painter = new SpriteSheetPainter(jumpCells);
-
-// Sprite....................................................		
-
-    sprite = new Sprite('runner', idle_painter, [ spriteAnimationLoop, jump, fall ]);
-
-// Initialization................................................
-
-		spritesheet.src = 'image/x.png';
+			// Jumping
+			if ( this.jumping )
+			{
+				this.thing.posY -= this.velocityY * ( ( time - this.lastUpdate ) / 1000 );
+				if ( this.jumpTimer.isOver() )
+				{
+					this.jumping = false;
+					this.jumpTimer.reset();
+				
+					this.fall();
+				}
+			}
 		
-		sprite.velocityY = 200;
-		sprite.left = 500;
-		sprite.top = GROUND;
+			// Hit
+			if ( this.hit )
+			{
+				if ( this.hitDirection == 'right' )
+				{
+					background.update( -this.velocityX, fps, canvas, enemy  );
+				}
+				else if ( this.hitDirection == 'left' )
+				{
+					background.update( this.velocityX, fps, canvas, enemy  );
+				}
+			
+				if ( this.hitTimer.isOver() )
+				{
+					this.hit = false;
+					this.hitTimer.reset();
+					this.idle();
+				}
+			}
+		}
+		else
+		{
+			if ( this.deadTimer.isOver() )
+			{
+				this.deadTimer.reset();
+				this.reset();
+				enemy.reset();
+				background.reset();				
+			}
+		}
+				
+		// Advancing Sprite	
+		this.setSpriteAdvanceRate();
+		
+    if ( time - this.lastSpriteAdvance > this.spriteAdvanceRate ) 
+		{
+			 //TODO:: replicate code in enemy.js. move the function to thing.js
+       this.thing.sprite.advance();
+			 this.thing.collision.update( this.thing.sprite.getCurCell() );
+       this.lastSpriteAdvance = time;
+    }
+
+		this.lastUpdate = time;
+	},
+	
+	paint: function ( context )
+	{		
+		this.thing.paint( context );
+		
+		// TODO::testing purpose drawing health bar
+		context.save();
+		context.fillStyle = "black";
+	  context.font = "bold 16px Arial";
+	  context.fillText("Health "+this.hp, 100, 100);
+		context.restore();
+	},
+	
+	setSpriteAdvanceRate: function ()
+	{
+		// Can set sprite advance rate here
+	},
+	
+	getCurAnimName: function ()
+	{
+		return this.thing.sprite.curAnimName;
+	},
+	
+	run: function ( forward )
+	{
+		if( !this.running )
+		{
+			if ( this.getCurAnimName() != 'run' && this.getCurAnimName() != 'jump' && this.getCurAnimName() != 'fall' )
+			{
+				this.thing.sprite.setAnim( 'run' );
+			}
+			this.runningForward = forward;
+			this.running        = true;
+		}
+	},
+	
+	idle: function ()
+	{
+		// Neutralize all other actions
+		if( !this.jumping && !this.falling )
+		{
+			this.thing.sprite.setAnim( 'idle' );
+		}
+		this.running = false;
+	},
+	
+	jump: function ()
+	{
+		if ( !this.jumping && !this.falling )
+		{
+			this.thing.sprite.setAnim( 'jump' );
+			this.jumpTimer.start();	
+			this.initialJumpHeight = this.thing.posY;
+			this.jumping           = true;
+		}
+	},
+	
+	fall: function ()
+	{
+		this.thing.sprite.setAnim( 'fall' );
+		this.falling = true;
+	},
+	
+	damage: function ( direction )
+	{
+		if ( !this.hit )
+		{
+			this.hitDirection = direction;
+			this.hp -= 5;
+			
+			if( this.hp < 0 ) this.hp = 0;
+			
+			if ( this.hp <= 0 && this.alive )
+			{
+				this.alive = false;
+				this.thing.sprite.setAnim( 'dead' );
+				this.deadTimer.start();
+			}
+			else
+			{
+				this.thing.sprite.setAnim( 'hit' );
+				this.hitTimer.start();
+				this.hit = true;
+				this.running = false;
+			}
+		}
+	},
+	reset: function ()
+	{
+		this.hp = 100;
+		this.thing.posX = playerPosX;
+		this.thing.posY = playerPosY;
+		this.alive = true;
+		this.idle();
+	}
+};
