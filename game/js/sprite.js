@@ -32,17 +32,18 @@ Sprite.prototype = {
 		 if( context == undefined ) alert( 'context in sprite,js paint is undefined' );
 		
      var cell = this.getCurCell();
+		 if( cell == undefined ) alert( 'cell in sprite.js is undefined, cellIndex: '+this.cellIndex );
      context.drawImage(this.spritesheet, cell.left  , cell.top,
 		                                     cell.width , cell.height,
 		                                     left			 , top,
 		                                     cell.width , cell.height);
   },
 
-	setAnim: function ( anim )
+	setAnim: function ( anim, reset )
 	{
 		if ( this.animations[ anim ] != undefined )
 		{
-			this.reset();
+			if ( reset ) this.reset();
 			this.curAnim     = this.animations[ anim ];
 			this.curAnimName = anim; 
 		}

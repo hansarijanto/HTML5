@@ -68,36 +68,4 @@ var canvas  = document.getElementById( 'canvas' ),
 context.strokeStyle = 'lightgray';
 context.lineWidth = 0.5;
 
-// Controls
-
-window.addEventListener("keydown", function(e) 
-{	
-	if( !player.hit && player.alive )
-	{
-		if( e.keyCode == 39 )
-		{
-			player.run( true );
-		}
-		else if( e.keyCode == 37 )
-		{
-			player.run( false );
-		}
-		else if( e.keyCode == 32 )
-		{
-			player.jump();
-		}
-	}
-}, true);
-
-window.addEventListener("keyup", function(e) 
-{
-	if( !player.hit && player.alive )
-	{
-		if( e.keyCode == 37 || e.keyCode == 39 )
-		{
-			player.idle();
-		}
-	}
-}, true);
-
 window.requestNextAnimationFrame( animate );

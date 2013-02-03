@@ -20,20 +20,20 @@
    </head>
 
   <body>
-    <canvas id='canvas' width='462' height='200'>
+    <canvas id='canvas' width='637' height='533'>
       Canvas not supported
     </canvas>
 
 		<div id='controls'>
-       Top: <input id='top_space' type='text' value='10' size='4'/>
 			 Left: <input id='left' type='text' value='10' size='4'/>
+			 Top: <input id='top_space' type='text' value='10' size='4'/>			
 			 Width: <input id='width' type='text' value='10' size='4'/>
 			 Height: <input id='height' type='text' value='10' size='4'/>
-       <!-- <input id='startStopButton' type='button' value='Start'/> -->
+       <input id='generate' type='button' value='Generate'/>
     </div>
-
-    <!-- <script src='js/requestNextAnimationFrame.js'></script>
-    <script src='js/sprites.js'></script> -->
+		<div id='results' style='padding-left:10px'>
+		</div>		
+		<script src='../js/jquery-1.9.0.js'></script>
     <script src='example.js'></script>
   </body>
 </html>

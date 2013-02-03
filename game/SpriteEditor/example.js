@@ -5,15 +5,41 @@ var canvas        = document.getElementById('canvas'),
 		top_space     = document.getElementById('top_space').value,
 		width         = document.getElementById('width').value, 
 		height        = document.getElementById('height').value;
+		
+		spritesheet.onload = function()
+		{
+			$('#canvas')[0].width  = spritesheet.width;
+			$('#canvas')[0].height = spritesheet.height;
+			$('#results').css("padding-left", spritesheet.width + 15 );
+		}
+		
+		// context.width  = spritesheet.width;
+		// context.height = spritesheet.height;
+		
+		$('#generate').click(function(){
+			generate();
+			});
 
 // Functions................................................
 
 function drawImage()
 {
-	context.drawImage(spritesheet, left, top_space,
-                                 width, height,
-                                 200, 100,
-                                 width, height);
+	// context.drawImage(spritesheet, left, top_space,
+	//                                  width, height,
+	//                                  200, 100,
+	//                                  width, height);
+	context.drawImage(spritesheet, 0, 0,
+                                 spritesheet.width, spritesheet.height,
+                                 0, 0,
+                                 spritesheet.width, spritesheet.height);
+
+	context.fillStyle = "rgba(0,0,0,.2)";
+	context.fillRect ( left, top_space , width ,height );																
+}
+
+function generate()
+{
+	$('#results').append('<div>{ left: '+left+', top: '+top_space+', width: '+width+', height: '+height+' },</div>');
 }
 
 function update()

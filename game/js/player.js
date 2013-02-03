@@ -53,7 +53,7 @@ Player.prototype =
 					}
 					this.falling = false;
 				
-					if ( this.running ) this.thing.sprite.setAnim( 'run' );
+					if ( this.running ) this.thing.sprite.setAnim( 'run', true );
 					else this.idle(); 
 				}
 			}
@@ -151,28 +151,60 @@ Player.prototype =
 		{
 			if ( this.getCurAnimName() != 'run' && this.getCurAnimName() != 'jump' && this.getCurAnimName() != 'fall' )
 			{
-				this.thing.sprite.setAnim( 'run' );
+				this.thing.sprite.setAnim( 'run', true );
 			}
 			this.runningForward = forward;
 			this.running        = true;
 		}
 	},
 	
+	attack: function ()
+	{
+		if( this.jumping )
+		{
+			if ( this.getCurAnimName() != 'jumpAtk' )
+			{
+				this.thing.sprite.setAnim( 'jumpAtk', false );
+			}
+		}
+		else if( this.falling )
+		{
+			if ( this.getCurAnimName() != 'fallAtk' )
+			{
+				this.thing.sprite.setAnim( 'fallAtk', false );
+			}
+		}
+		else if( this.running )
+		{
+			if ( this.getCurAnimName() != 'runAtk' )
+			{
+				this.thing.sprite.setAnim( 'runAtk', false );
+			}
+		}
+		else
+		{
+			if ( this.getCurAnimName() != 'idleAtk' )
+			{
+				this.thing.sprite.setAnim( 'idleAtk', true );
+			}
+		}
+	},
+	
 	idle: function ()
 	{
 		// Neutralize all other actions
+		this.running = false;
 		if( !this.jumping && !this.falling )
 		{
-			this.thing.sprite.setAnim( 'idle' );
+			this.thing.sprite.setAnim( 'idle', true );
 		}
-		this.running = false;
 	},
 	
 	jump: function ()
 	{
 		if ( !this.jumping && !this.falling )
 		{
-			this.thing.sprite.setAnim( 'jump' );
+			this.thing.sprite.setAnim( 'jump', true );
 			this.jumpTimer.start();	
 			this.initialJumpHeight = this.thing.posY;
 			this.jumping           = true;
@@ -181,7 +213,7 @@ Player.prototype =
 	
 	fall: function ()
 	{
-		this.thing.sprite.setAnim( 'fall' );
+		this.thing.sprite.setAnim( 'fall', true );
 		this.falling = true;
 	},
 	
@@ -197,12 +229,12 @@ Player.prototype =
 			if ( this.hp <= 0 && this.alive )
 			{
 				this.alive = false;
-				this.thing.sprite.setAnim( 'dead' );
+				this.thing.sprite.setAnim( 'dead', true );
 				this.deadTimer.start();
 			}
 			else
 			{
-				this.thing.sprite.setAnim( 'hit' );
+				this.thing.sprite.setAnim( 'hit', true );
 				this.hitTimer.start();
 				this.hit = true;
 				this.running = false;
