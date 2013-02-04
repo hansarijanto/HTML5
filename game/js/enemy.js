@@ -16,7 +16,7 @@ Enemy.prototype =
 	velocityY           : 170,
 	velocityX           : 170,
 
-	update: function ( context, time, background, fps, canvas )
+	update: function ( context, time )
 	{
 		// Advancing Sprite	
 		this.setSpriteAdvanceRate();

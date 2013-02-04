@@ -41,11 +41,15 @@ function animate( time )
 
 	context.clearRect( 0, 0, canvas.width, canvas.height );
 
-	player.update( context, time, background, fps, canvas, enemy );
-	enemy.update( context, time, background, fps, canvas, enemy );
-	background.draw( context );
+	player.update( context, time );
+	enemy.update( context, time );
+	bulletManager.update();
+	
+	background.paint( context );
 	player.paint( context );
-	enemy.paint( context );
+	enemy.paint( context );	
+	bulletManager.paint( context );
+	
 	collisionManager.hasPlayerCollided( context );
 
 	window.requestNextAnimationFrame( animate );
@@ -53,10 +57,12 @@ function animate( time )
 
 // Initialization
 
-var canvas  = document.getElementById( 'canvas' ),
-    context = canvas.getContext( '2d' ),
-		player  = initializePlayer(),
-		enemy   = initializeEnemy(),
+var canvas       = document.getElementById( 'canvas' ),
+    context      = canvas.getContext( '2d' ),
+		player       = initializePlayer(),
+		enemy        = initializeEnemy(),
+		
+		bulletManager    = new BulletManager,		
 		collisionManager = initializeCollisionManager(),
 		
 		background = new Background(),

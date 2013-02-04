@@ -33,7 +33,7 @@ Player.prototype =
 	running             : false,
 	runningForward      : true,
 
-	update: function ( context, time, background, fps, canvas, enemy )
+	update: function ( context, time )
 	{
 		if ( this.alive )
 		{
@@ -61,8 +61,8 @@ Player.prototype =
 			// Running		
 			if ( this.running )
 			{
-				if ( this.runningForward ) background.update( this.velocityX, fps, canvas, enemy  );
-				else 											 background.update( -this.velocityX, fps, canvas, enemy );
+				if ( this.runningForward ) background.update(  this.velocityX );
+				else 											 background.update( -this.velocityX );
 			}
 		
 			// Jumping
@@ -83,11 +83,11 @@ Player.prototype =
 			{
 				if ( this.hitDirection == 'right' )
 				{
-					background.update( -this.velocityX, fps, canvas, enemy  );
+					background.update( -this.velocityX );
 				}
 				else if ( this.hitDirection == 'left' )
 				{
-					background.update( this.velocityX, fps, canvas, enemy  );
+					background.update( this.velocityX );
 				}
 			
 				if ( this.hitTimer.isOver() )
@@ -188,6 +188,8 @@ Player.prototype =
 				this.thing.sprite.setAnim( 'idleAtk', true );
 			}
 		}
+		//adding new bullet
+		bulletManager.createBullet();
 	},
 	
 	idle: function ()

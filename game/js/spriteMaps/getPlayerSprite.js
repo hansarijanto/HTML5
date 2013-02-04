@@ -1,8 +1,5 @@
 var getPlayerSprite = function ()
-{
-	spritesheet 		= new Image(),
-	spritesheet.src = 'image/x.png'; 
-	
+{	
 	runningAnimation = 
 	[
 	  { left: 319, top: 19, width: 30, height: 34 },

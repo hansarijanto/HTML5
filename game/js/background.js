@@ -11,7 +11,7 @@ Background.prototype =
 	backgroundWidth  : 1000,
 	curPosition      : 0,
 
-	draw: function ( context ) 
+	paint: function ( context ) 
 	{
 		
 		context.save();
@@ -33,13 +33,14 @@ Background.prototype =
 		// context.restore();
 	},
 
-	update: function ( velocity, fps, canvas, enemy ) 
+	update: function ( velocity ) 
 	{
 		distanceMoved = velocity / fps;
 		distanceMoved = Math.round( distanceMoved );
 		if ( this.curPosition + distanceMoved > 0 && this.curPosition + distanceMoved < this.backgroundWidth )
 		{
 			enemy.backgroundUpdate( -distanceMoved );
+			bulletManager.backgroundUpdate( distanceMoved );
 			this.backgroundOffset = this.backgroundOffset < canvas.width ? this.backgroundOffset + velocity / fps : 0;
 			this.curPosition += velocity / fps;						
 		}
