@@ -1,7 +1,8 @@
-var Player = function ( name, posX, posY, sprite, type ) 
+var Player = function () 
 {	
+	sprite    			= new getPlayerSprite();
 	collision       = new Collision( sprite.getCurCell() );
-	this.thing      = new Thing( name, posX, posY, sprite, type, collision );	
+	this.thing      = new Thing(  'player', playerPosX, playerPosY, sprite, 'player', collision );	
 	this.jumpTimer  = new AnimationTimer( 500 );
 	this.hitTimer   = new AnimationTimer( 300 );
 	this.deadTimer  = new AnimationTimer( 1000 );

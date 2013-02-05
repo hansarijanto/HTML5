@@ -6,29 +6,6 @@ function calculateFps( now )
    return fps; 
 }
 
-function initializePlayer()
-{
-	var playerSprite = new getPlayerSprite();
-	var player 			 = new Player( 'player', playerPosX, playerPosY, playerSprite, 'player' );
-	
-	return player;
-}
-
-function initializeEnemy()
-{
-	var enemySprite = new getEnemy1Sprite();
-	var enemy 			= new Enemy( 'enemy', enemyPosX, enemyPosY, enemySprite, 'enemy' );
-	
-	return enemy;
-}
-
-function initializeCollisionManager()
-{
-	var collisionManager = new CollisionManager( player, enemy, null );
-	
-	return collisionManager;
-}
-
 function animate( time ) 
 {
 	
@@ -42,15 +19,15 @@ function animate( time )
 	context.clearRect( 0, 0, canvas.width, canvas.height );
 
 	player.update( context, time );
-	enemy.update( context, time );
+	enemyManager.update( context, time );
 	bulletManager.update();
 	
 	background.paint( context );
 	player.paint( context );
-	enemy.paint( context );	
+	enemyManager.paint( context );	
 	bulletManager.paint( context );
 	
-	collisionManager.hasPlayerCollided( context );
+	collisionManager.update( context );
 
 	window.requestNextAnimationFrame( animate );
 }
@@ -59,11 +36,11 @@ function animate( time )
 
 var canvas       = document.getElementById( 'canvas' ),
     context      = canvas.getContext( '2d' ),
-		player       = initializePlayer(),
-		enemy        = initializeEnemy(),
+		player       = new Player(),
 		
+		enemyManager     = new EnemyManager(),
 		bulletManager    = new BulletManager,		
-		collisionManager = initializeCollisionManager(),
+		collisionManager = new CollisionManager(),
 		
 		background = new Background(),
 
