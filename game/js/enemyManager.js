@@ -1,6 +1,7 @@
 var EnemyManager = function ()
 {	
-	this.enemies = new Array();
+	this.enemies  = new Array();
+	this.hitTimer = new AnimationTimer( 200 );
 	this.initializeEnemies();
 	return this;
 };
@@ -8,6 +9,7 @@ var EnemyManager = function ()
 EnemyManager.prototype =
 {
 	enemies  		 : null,
+	hitTimer     : null,
 	
 	createEnemy: function ( name, posX, posY )
 	{

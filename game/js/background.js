@@ -29,6 +29,7 @@ Background.prototype =
 		{
 			enemyManager.backgroundUpdate( distanceMoved );
 			bulletManager.backgroundUpdate( distanceMoved );
+			explosionManager.backgroundUpdate( distanceMoved );
 			this.backgroundOffset = this.backgroundOffset < canvas.width ? this.backgroundOffset + velocity / fps : 0;
 			this.curPosition += velocity / fps;						
 		}

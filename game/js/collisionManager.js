@@ -33,7 +33,7 @@ CollisionManager.prototype =
 			return undefined;
 		}
 	},
-	update: function ( context )
+	checkEnemyCollision: function ()
 	{
 		$.each( enemyManager.getEnemies(), function () 
 		{ 
@@ -45,7 +45,7 @@ CollisionManager.prototype =
 				if ( collisionDirection != undefined ) player.damage( collisionDirection );
 			
 				// Check bullet collision with enemies
-				var deleteBullet = false;
+				var bulletToDelete = 0;
 				$.each( bulletManager.getBullets(), function () 
 				{
 					var bullet = this;
@@ -53,12 +53,22 @@ CollisionManager.prototype =
 					if ( collisionDirection != undefined ) 
 					{
 						enemy.damage( collisionDirection );	
-						deleteBullet = true;
+						bulletToDelete += 1;
 					}
 				});
 			
-				if ( deleteBullet ) bulletManager.deleteBullet();
+				if ( bulletToDelete > 0 ) 
+				{
+					for ( var i = 0; i < bulletToDelete; ++i )
+					{
+						bulletManager.deleteBullet();
+					}
+				}
 			}
-		});		
+		});
+	},
+	update: function ( context )
+	{
+		this.checkEnemyCollision();
 	}
 };

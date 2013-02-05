@@ -20,12 +20,14 @@ function animate( time )
 
 	player.update( context, time );
 	enemyManager.update( context, time );
-	bulletManager.update();
+	bulletManager.update( context );
+	explosionManager.update( context, time );
 	
 	background.paint( context );
 	player.paint( context );
 	enemyManager.paint( context );	
 	bulletManager.paint( context );
+	explosionManager.paint( context );
 	
 	collisionManager.update( context );
 
@@ -40,6 +42,7 @@ var canvas       = document.getElementById( 'canvas' ),
 		
 		enemyManager     = new EnemyManager(),
 		bulletManager    = new BulletManager,		
+		explosionManager = new ExplosionManager(),
 		collisionManager = new CollisionManager(),
 		
 		background = new Background(),

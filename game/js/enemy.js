@@ -16,6 +16,7 @@ Enemy.prototype =
 	lastUpdate					: 0,
 	hp                  : 15,
 	alive               : true,
+	hit                 : false,
 	
   spriteAdvanceRate   : 700,
 	lastSpriteAdvance		: 0,
@@ -29,12 +30,15 @@ Enemy.prototype =
 			// Advancing Sprite	
 			this.setSpriteAdvanceRate();
 		
+			if ( this.lastSpriteAdvance == 0 ) this.lastSpriteAdvance = time;
 	    if ( time - this.lastSpriteAdvance > this.spriteAdvanceRate ) 
 			{
 	       this.thing.sprite.advance();
 				 this.thing.collision.update( this.thing.sprite.getCurCell() );
 	       this.lastSpriteAdvance = time;
 	    }
+	
+			if ( this.hit && enemyManager.hitTimer.isOver() ) this.hit = false;
 
 			this.lastUpdate = time;
 		}
@@ -49,7 +53,13 @@ Enemy.prototype =
 	{
 		if( this.alive )
 		{
+			if( this.hit ) 
+			{
+				context.save();
+				context.globalAlpha = 0.5;
+			}
 			this.thing.paint( context );
+			context.restore();
 		}
 	},
 	
@@ -76,8 +86,13 @@ Enemy.prototype =
 		if ( this.hp <= 0 && this.alive )
 		{
 			this.alive = false;
-			// this.thing.sprite.setAnim( 'dead', true );
-			// this.deadTimer.start();
+			explosionManager.createExplosion( 'explosion1', this.thing.posX, this.thing.posY );
+		}
+		else
+		{
+			this.hit = true;
+			enemyManager.hitTimer.reset();
+			enemyManager.hitTimer.start();
 		}
 	}
 };

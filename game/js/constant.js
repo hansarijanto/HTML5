@@ -9,8 +9,11 @@ var enemyPosY = 380;
 var bulletOffsetX = 30;
 var bulletOffsetY = 12;
 
-var enemy1spritesheet 		= new Image();
-enemy1spritesheet.src = 'image/enemy_1.png';
+var enemy1Spritesheet 		= new Image();
+enemy1Spritesheet.src = 'image/enemy_1.png';
+
+var explosion1Spritesheet 		= new Image();
+explosion1Spritesheet.src = 'image/explosion_1.png';
 
 var spritesheet 		= new Image();
 spritesheet.src = 'image/x.png';

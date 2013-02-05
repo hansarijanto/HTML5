@@ -13,5 +13,5 @@ var getEnemy1Sprite = function ()
 	animations = new Array();
 	animations['idle'] = idleAnimation;
 	
-	return new Sprite( enemy1spritesheet, animations );
+	return new Sprite( enemy1Spritesheet, animations );
 };

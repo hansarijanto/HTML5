@@ -113,6 +113,7 @@ Player.prototype =
 		// Advancing Sprite	
 		this.setSpriteAdvanceRate();
 		
+		if ( this.lastSpriteAdvance == 0 ) this.lastSpriteAdvance = time;
     if ( time - this.lastSpriteAdvance > this.spriteAdvanceRate ) 
 		{
 			 //TODO:: replicate code in enemy.js. move the function to thing.js
