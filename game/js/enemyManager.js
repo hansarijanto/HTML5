@@ -1,7 +1,7 @@
 var EnemyManager = function ()
 {	
 	this.enemies = new Array();
-	this.createEnemy( 'enemy1' );
+	this.initializeEnemies();
 	return this;
 };
 
@@ -9,9 +9,9 @@ EnemyManager.prototype =
 {
 	enemies  		 : null,
 	
-	createEnemy: function ( name )
+	createEnemy: function ( name, posX, posY )
 	{
-		this.enemies.push( new Enemy( name ) );
+		this.enemies.push( new Enemy( name, posX, posY ) );
 	},
 	update: function ( context, time )
 	{
@@ -28,5 +28,12 @@ EnemyManager.prototype =
 	getEnemies: function ()
 	{
 		return this.enemies;
+	},
+	initializeEnemies: function ()
+	{
+		this.createEnemy( 'enemy1', enemyPosX, enemyPosY );
+		this.createEnemy( 'enemy1', enemyPosX + 300, enemyPosY );
+		this.createEnemy( 'enemy1', enemyPosX + 600, enemyPosY );
+		this.createEnemy( 'enemy1', enemyPosX + 450, enemyPosY - 70 );
 	}
 };

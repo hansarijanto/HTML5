@@ -1,11 +1,11 @@
-var Enemy = function ( name ) 
+var Enemy = function ( name, posX, posY ) 
 {	
 	if ( name == 'enemy1' )
 	{
 		sprite = new getEnemy1Sprite();
 	}
 	collision      = new Collision( sprite.getCurCell() );
-	this.thing     = new Thing( name, enemyPosX, enemyPosY, sprite, 'enemy', collision );	
+	this.thing     = new Thing( name, posX, posY, sprite, 'enemy', collision );	
 	
 	return this;
 };

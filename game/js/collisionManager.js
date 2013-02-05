@@ -20,11 +20,11 @@ CollisionManager.prototype =
 		topTarget    = target.thing.posY;
 		bottomTarget = target.thing.posY + targetCollision.top;
 	
-		if ( ( rightCollider >= leftTarget && rightCollider <= rightTarget ) && ( bottomCollider >= topTarget && bottomCollider <= bottomTarget ) )
+		if ( ( rightCollider >= leftTarget && rightCollider <= rightTarget ) && ( ( bottomCollider >= topTarget && bottomCollider <= bottomTarget ) || ( topCollider >= topTarget && topCollider <= bottomTarget ) ) )
 		{
 			return 'right';
 		}
-		else if( ( leftCollider <= rightTarget && leftCollider >= leftTarget ) && ( bottomCollider >= topTarget && bottomCollider <= bottomTarget ) )
+		else if( ( leftCollider <= rightTarget && leftCollider >= leftTarget ) && ( ( bottomCollider >= topTarget && bottomCollider <= bottomTarget ) || ( topCollider >= topTarget && topCollider <= bottomTarget ) ) )
 		{
 			return 'left';
 		}
