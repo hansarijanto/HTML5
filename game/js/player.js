@@ -105,7 +105,9 @@ Player.prototype =
 			{
 				this.deadTimer.reset();
 				this.reset();
-				enemy.reset();
+				enemyManager.reset();
+				explosionManager.reset();
+				bulletManager.reset();
 				background.reset();				
 			}
 		}

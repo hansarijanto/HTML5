@@ -23,6 +23,10 @@ EnemyManager.prototype =
 	{
 		$.each( this.enemies, function () { this.paint( context ); } );
 	},
+	reset: function ()
+	{
+		$.each( this.enemies, function () { this.reset(); } );
+	},
 	backgroundUpdate: function ( distanceMoved )
 	{
 		$.each( this.enemies, function () { this.backgroundUpdate( -distanceMoved ); } );

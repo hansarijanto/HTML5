@@ -7,6 +7,9 @@ var Enemy = function ( name, posX, posY )
 	collision      = new Collision( sprite.getCurCell() );
 	this.thing     = new Thing( name, posX, posY, sprite, 'enemy', collision );	
 	
+	this.originalPosX = posX;
+	this.originalPosY = posY;
+	
 	return this;
 };
 
@@ -17,6 +20,9 @@ Enemy.prototype =
 	hp                  : 15,
 	alive               : true,
 	hit                 : false,
+	
+	originalPosX        : 0,
+	originalPosY        : 0,
 	
   spriteAdvanceRate   : 700,
 	lastSpriteAdvance		: 0,
@@ -74,8 +80,9 @@ Enemy.prototype =
 	},
 	reset: function ()
 	{
-		this.thing.posX = enemyPosX;
-		this.thing.posY = enemyPosY;
+		this.thing.posX = this.originalPosX;
+		this.thing.posY = this.originalPosY;
+		this.alive = true;
 	},
 	damage: function()
 	{

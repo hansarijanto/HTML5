@@ -43,5 +43,9 @@ ExplosionManager.prototype =
 	getExplosions: function ()
 	{
 		return this.explosions;
+	},
+	reset: function ()
+	{
+		this.explosions = new Array();
 	}
 };

@@ -41,5 +41,9 @@ BulletManager.prototype =
 	getBullets: function ()
 	{
 		return this.bullets;
+	},
+	reset: function ()
+	{
+		this.bullets = new Array();
 	}
 };
