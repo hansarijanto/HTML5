@@ -12,14 +12,17 @@ Background.prototype =
 	backgroundWidth  : stageWidth,
 	curPosition      : 0,
 	groundManager    : null,
+	paintReq         : 0,
 
 	paint: function ( context ) 
 	{
-		
+		if ( this.paintReq == 0 && this.backgroundImage.width > 0 ) this.paintReq = Math.ceil( ( stageWidth + canvas.width )  / ( this.backgroundImage.width - 2 ) );
 		context.save();
 		context.translate( -this.backgroundOffset, 0 );
-		context.drawImage( this.backgroundImage, 0, 0 );
-		context.drawImage( this.backgroundImage, this.backgroundImage.width-2, 0);
+		for ( var i = 0; i < this.paintReq; ++i )
+		{
+			context.drawImage( this.backgroundImage, ( this.backgroundImage.width - 2 ) * i, 0 );
+		}
 		context.restore();
 		
 		// draw groundManager
@@ -36,7 +39,7 @@ Background.prototype =
 			bulletManager.backgroundUpdate( distanceMoved );
 			explosionManager.backgroundUpdate( distanceMoved );
 			this.groundManager.backgroundUpdate( distanceMoved );
-			this.backgroundOffset = this.backgroundOffset < canvas.width ? this.backgroundOffset + velocity / fps : 0;
+			this.backgroundOffset += velocity / fps;
 			this.curPosition += velocity / fps;						
 		}
 	},

@@ -12,12 +12,12 @@ CollisionManager.prototype =
 	
 		rightCollider  = collider.thing.posX + colliderCollision.left;
 		leftCollider   = collider.thing.posX;
-		topCollider    = collider.thing.posY;
+		topCollider    = collider.thing.posY + colliderCollision.yOffset;
 		bottomCollider = collider.thing.posY + colliderCollision.top;
 	
 		rightTarget  = target.thing.posX + targetCollision.left;
 		leftTarget   = target.thing.posX;
-		topTarget    = target.thing.posY;
+		topTarget    = target.thing.posY + targetCollision.yOffset;
 		bottomTarget = target.thing.posY + targetCollision.top;
 	
 		if ( ( rightCollider >= leftTarget && rightCollider <= rightTarget ) )
@@ -100,7 +100,7 @@ CollisionManager.prototype =
 							player.idle();
 						}
 						
-						player.thing.posY = ground.thing.posY - player.thing.collision.top;
+						player.thing.posY = ground.thing.posY + ground.thing.collision.yOffset - player.thing.collision.top;
 					}
 				}
 			}

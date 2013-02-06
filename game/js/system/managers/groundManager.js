@@ -37,5 +37,8 @@ GroundManager.prototype =
 	{
 		this.create( 'grass', 0		, groundY );
 		this.create( 'grass', 500 , groundY );
+		this.create( 'grass', 1100 , groundY );
+		this.create( 'grass', 1700 , groundY );
+		this.create( 'grass', 2200 , groundY );
 	}
 };

@@ -29,7 +29,7 @@ Player.prototype =
 	jumpTimer           : null,
 	initialJumpHeight   : 0,
 	
-	falling							: true,
+	falling							: false,
 	
 	running             : false,
 	runningForward      : true,

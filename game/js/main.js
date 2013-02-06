@@ -18,18 +18,17 @@ function animate( time )
 
 	context.clearRect( 0, 0, canvas.width, canvas.height );
 
-	player.update( context, time );
+	collisionManager.update( context );
 	enemyManager.update( context, time );
 	bulletManager.update( context );
 	explosionManager.update( context, time );
+	player.update( context, time );	
 	
 	background.paint( context );
 	player.paint( context );
 	enemyManager.paint( context );	
 	bulletManager.paint( context );
 	explosionManager.paint( context );
-	
-	collisionManager.update( context );
 
 	window.requestNextAnimationFrame( animate );
 }

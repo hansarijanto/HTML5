@@ -4,7 +4,7 @@ var Ground = function ( name, posX, posY )
 	{
 		sprite = new getGroundSprite();
 	}
-	collision  = new Collision( sprite.getCurCell() );
+	collision  = new Collision( sprite.getCurCell(), groundCollisionYOffset );
 	this.thing = new Thing( name, posX, posY, sprite, 'ground', collision );	
 	return this;
 };

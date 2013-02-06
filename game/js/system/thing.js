@@ -21,7 +21,7 @@ Thing.prototype =
 	collision  : null,
 	
 	lastSpriteAdvance		: 0,
-
+	
 	paint: function ( context )
 	{
 		this.sprite.paint( context, this.posX, this.posY );
