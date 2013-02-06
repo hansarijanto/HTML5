@@ -47,11 +47,9 @@ CollisionManager.prototype =
 			if( enemy.alive )
 			{
 				collisionDirection = collisionManager.collisionCheck( player, enemy, context ); 
-				if ( collisionDirection != undefined ) 
-				{
-					if 			( collisionDirection == 'right_top' || collisionDirection == 'right_bottom' ) player.damage( 'right' );
-					else if ( collisionDirection == 'left_top' || collisionDirection == 'left_bottom' 	) player.damage( 'left'  );
-				}
+				
+				if 			( collisionDirection == 'right_top' || collisionDirection == 'right_bottom' ) player.damage( 'right' );
+				else if ( collisionDirection == 'left_top' || collisionDirection == 'left_bottom' 	) player.damage( 'left'  );
 			
 				// Check bullet collision with enemies
 				var bulletToDelete = 0;
@@ -78,6 +76,7 @@ CollisionManager.prototype =
 	},
 	checkGroundCollision: function ( context )
 	{
+		var groundCollided = false;
 		$.each( background.groundManager.getGrounds(), function () 
 		{ 
 			// Check player collision with enemies
@@ -87,6 +86,7 @@ CollisionManager.prototype =
 				collisionDirection = collisionManager.collisionCheck( player, ground, context );
 				if( collisionDirection == 'right_top' || collisionDirection == 'left_top' )
 				{
+					groundCollided = true;
 					if( player.falling )
 					{
 						player.falling = false;
@@ -103,12 +103,12 @@ CollisionManager.prototype =
 						player.thing.posY = ground.thing.posY - player.thing.collision.top;
 					}
 				}
-				else
-				{
-					if ( !player.falling && !player.jumping ) player.falling = true;
-				}
 			}
 		});
+		if ( !groundCollided )
+		{
+			if ( !player.falling && !player.jumping ) player.falling = true;
+		}
 	},
 	update: function ( context )
 	{

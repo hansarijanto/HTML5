@@ -1,6 +1,6 @@
 var Collision = function ( cell )
 {	
-	this.update( cell );	
+	this.update( cell );
 	return this;
 };
 

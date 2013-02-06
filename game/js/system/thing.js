@@ -30,7 +30,7 @@ Thing.prototype =
 		if ( debug == true )
 		{
 			context.fillStyle = "rgba(0,0,0,.2)";
-			context.fillRect ( this.posX, this.posY , this.collision.left ,this.collision.top );
+			if ( this.collision != undefined ) context.fillRect ( this.posX, this.posY , this.collision.left ,this.collision.top );
 		}
 	},
 	advanceSprite: function ( time, spriteAdvanceRate )
@@ -39,8 +39,8 @@ Thing.prototype =
     if ( time - this.lastSpriteAdvance > spriteAdvanceRate ) 
 		{
        this.sprite.advance();
-			 // TODO:: commented out because of ground collision for falling in collisionManager
-			 // if( this.collision != undefined ) this.collision.update( this.sprite.getCurCell() );
+			 //TODO:: this is causing some lags when changing sprites due to ground collision issues fix needed
+			 if( this.collision != undefined ) this.collision.update( this.sprite.getCurCell() );
        this.lastSpriteAdvance = time;
     }
 	},	
