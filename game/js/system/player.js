@@ -2,7 +2,7 @@ var Player = function ()
 {	
 	sprite    			= new getPlayerSprite();
 	collision       = new Collision( sprite.getCurCell() );
-	this.thing      = new Thing(  'player', playerPosX, playerPosY, sprite, 'player', collision );	
+	this.thing      = new Thing(  'player', playerPosX, groundY - playerGroundOffset, sprite, 'player', collision );	
 	this.jumpTimer  = new AnimationTimer( 500 );
 	this.hitTimer   = new AnimationTimer( 300 );
 	this.deadTimer  = new AnimationTimer( 1000 );
@@ -18,10 +18,10 @@ Player.prototype =
 	hitDirection        : null,
 	alive               : true,
 	
+	spriteAdvanceRate   : 100,
+	
 	hp 									: 100,
 	
-  spriteAdvanceRate   : 100,
-	lastSpriteAdvance		: 0,
 	velocityY           : 170,
 	velocityX           : 170,
 
@@ -29,7 +29,7 @@ Player.prototype =
 	jumpTimer           : null,
 	initialJumpHeight   : 0,
 	
-	falling							: false,
+	falling							: true,
 	
 	running             : false,
 	runningForward      : true,
@@ -41,35 +41,20 @@ Player.prototype =
 			// Falling
 			if ( this.falling )
 			{
-				// TODO::Stop falling when a collision is made with a ground object
-				if ( this.thing.posY < this.initialJumpHeight )
-				{
-					this.thing.posY += this.velocityY * ( ( time - this.lastUpdate ) / 1000 );
-				}
-				else 
-				{
-					if ( this.thing.posY > this.initialJumpHeight ) 
-					{
-						this.thing.posY = this.initialJumpHeight;
-					}
-					this.falling = false;
-				
-					if ( this.running ) this.thing.sprite.setAnim( 'run', true );
-					else this.idle(); 
-				}
+					this.thing.posY += Math.round( this.velocityY * ( ( time - this.lastUpdate ) / 1000 ) );
 			}
 		
 			// Running		
 			if ( this.running )
 			{
-				if ( this.runningForward ) background.update(  this.velocityX );
-				else 											 background.update( -this.velocityX );
+				if ( this.runningForward ) background.update(  this.velocityX, context, time );
+				else 											 background.update( -this.velocityX, context, time );
 			}
 		
 			// Jumping
 			if ( this.jumping )
 			{
-				this.thing.posY -= this.velocityY * ( ( time - this.lastUpdate ) / 1000 );
+				this.thing.posY -= Math.round( this.velocityY * ( ( time - this.lastUpdate ) / 1000 ) );
 				if ( this.jumpTimer.isOver() )
 				{
 					this.jumping = false;
@@ -84,11 +69,11 @@ Player.prototype =
 			{
 				if ( this.hitDirection == 'right' )
 				{
-					background.update( -this.velocityX );
+					background.update( -this.velocityX, context, time );
 				}
 				else if ( this.hitDirection == 'left' )
 				{
-					background.update( this.velocityX );
+					background.update( this.velocityX, context, time );
 				}
 			
 				if ( this.hitTimer.isOver() )
@@ -112,18 +97,8 @@ Player.prototype =
 			}
 		}
 				
-		// Advancing Sprite	
-		this.setSpriteAdvanceRate();
+		this.thing.advanceSprite( time, this.spriteAdvanceRate );
 		
-		if ( this.lastSpriteAdvance == 0 ) this.lastSpriteAdvance = time;
-    if ( time - this.lastSpriteAdvance > this.spriteAdvanceRate ) 
-		{
-			 //TODO:: replicate code in enemy.js. move the function to thing.js
-       this.thing.sprite.advance();
-			 this.thing.collision.update( this.thing.sprite.getCurCell() );
-       this.lastSpriteAdvance = time;
-    }
-
 		this.lastUpdate = time;
 	},
 	
@@ -137,11 +112,6 @@ Player.prototype =
 	  context.font = "bold 16px Arial";
 	  context.fillText("Health "+this.hp, 100, 100);
 		context.restore();
-	},
-	
-	setSpriteAdvanceRate: function ()
-	{
-		// Can set sprite advance rate here
 	},
 	
 	getCurAnimName: function ()

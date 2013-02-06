@@ -15,10 +15,12 @@ ExplosionManager.prototype =
 		newExplosion.explosionTimer.start();
 		this.explosions.push( newExplosion );
 	},
+	
 	deleteExplosion: function ()
 	{
 		this.explosions.shift();
 	},
+	
 	update: function ( context, time )
 	{
 		$.each( this.explosions, function () { this.update( context, time ); } );
@@ -32,18 +34,22 @@ ExplosionManager.prototype =
 			this.explosionToDelete = 0;
 		}
 	},
+	
 	paint: function ( context )
 	{
 		$.each( this.explosions, function () { this.paint( context ); } );
 	},
+	
 	backgroundUpdate: function ( distanceMoved )
 	{
-		$.each( this.explosions, function () { this.backgroundUpdate( -distanceMoved ); } );
+		$.each( this.explosions, function () { this.thing.backgroundUpdate( -distanceMoved ); } );
 	},
+	
 	getExplosions: function ()
 	{
 		return this.explosions;
 	},
+	
 	reset: function ()
 	{
 		this.explosions = new Array();

@@ -25,7 +25,6 @@ Enemy.prototype =
 	originalPosY        : 0,
 	
   spriteAdvanceRate   : 700,
-	lastSpriteAdvance		: 0,
 	velocityY           : 170,
 	velocityX           : 170,
 
@@ -33,26 +32,12 @@ Enemy.prototype =
 	{
 		if( this.alive )
 		{
-			// Advancing Sprite	
-			this.setSpriteAdvanceRate();
-		
-			if ( this.lastSpriteAdvance == 0 ) this.lastSpriteAdvance = time;
-	    if ( time - this.lastSpriteAdvance > this.spriteAdvanceRate ) 
-			{
-	       this.thing.sprite.advance();
-				 this.thing.collision.update( this.thing.sprite.getCurCell() );
-	       this.lastSpriteAdvance = time;
-	    }
+			this.thing.advanceSprite( time, this.spriteAdvanceRate );
 	
 			if ( this.hit && enemyManager.hitTimer.isOver() ) this.hit = false;
 
 			this.lastUpdate = time;
 		}
-	},
-	
-	backgroundUpdate: function ( distanceMoved )
-	{
-		this.thing.posX += distanceMoved;
 	},
 	
 	paint: function ( context )
@@ -78,12 +63,14 @@ Enemy.prototype =
 	{
 		return this.thing.sprite.curAnimName;
 	},
+	
 	reset: function ()
 	{
 		this.thing.posX = this.originalPosX;
 		this.thing.posY = this.originalPosY;
 		this.alive = true;
 	},
+	
 	damage: function()
 	{
 		this.hp -= 5;

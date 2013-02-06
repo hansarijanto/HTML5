@@ -29,7 +29,7 @@ EnemyManager.prototype =
 	},
 	backgroundUpdate: function ( distanceMoved )
 	{
-		$.each( this.enemies, function () { this.backgroundUpdate( -distanceMoved ); } );
+		$.each( this.enemies, function () { this.thing.backgroundUpdate( -distanceMoved ); } );
 	},
 	getEnemies: function ()
 	{

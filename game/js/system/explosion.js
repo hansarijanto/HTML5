@@ -16,7 +16,6 @@ Explosion.prototype =
 	
 	explosionTimer      : null,
   spriteAdvanceRate   : 350,
-	lastSpriteAdvance		: 0,
 
 	update: function ( context, time )
 	{
@@ -25,17 +24,7 @@ Explosion.prototype =
 			explosionManager.explosionToDelete += 1;
 		}
 		
-		if ( this.lastSpriteAdvance == 0 ) this.lastSpriteAdvance = time;
-    if ( time - this.lastSpriteAdvance > this.spriteAdvanceRate ) 
-		{
-       this.thing.sprite.advance();
-       this.lastSpriteAdvance = time;
-    }
-	},
-	
-	backgroundUpdate: function ( distanceMoved )
-	{
-		this.thing.posX += distanceMoved;
+		this.thing.advanceSprite( time, this.spriteAdvanceRate );
 	},
 	
 	paint: function ( context )

@@ -19,6 +19,8 @@ Thing.prototype =
 	posY     	 : 0,
 	sprite   	 : null,
 	collision  : null,
+	
+	lastSpriteAdvance		: 0,
 
 	paint: function ( context )
 	{
@@ -30,5 +32,20 @@ Thing.prototype =
 			context.fillStyle = "rgba(0,0,0,.2)";
 			context.fillRect ( this.posX, this.posY , this.collision.left ,this.collision.top );
 		}
-	}
+	},
+	advanceSprite: function ( time, spriteAdvanceRate )
+	{	
+		if ( this.lastSpriteAdvance == 0 ) this.lastSpriteAdvance = time;
+    if ( time - this.lastSpriteAdvance > spriteAdvanceRate ) 
+		{
+       this.sprite.advance();
+			 // TODO:: commented out because of ground collision for falling in collisionManager
+			 // if( this.collision != undefined ) this.collision.update( this.sprite.getCurCell() );
+       this.lastSpriteAdvance = time;
+    }
+	},	
+	backgroundUpdate: function ( distanceMoved )
+	{
+		this.posX += distanceMoved;
+	},
 };

@@ -1,6 +1,5 @@
 var BulletManager = function ()
 {	
-	this.bulletSprite = new getBulletSprite();
 	this.bullets      = new Array();
 	return this;
 };
@@ -12,7 +11,7 @@ BulletManager.prototype =
 	
 	createBullet: function ()
 	{
-		this.bullets.push( new Bullet( 'bullet', player.thing.posX + bulletOffsetX, player.thing.posY + bulletOffsetY, this.bulletSprite, 'bullet' ) );
+		this.bullets.push( new Bullet( 'bullet_1' ) );
 	},
 	deleteBullet: function ()
 	{
@@ -36,7 +35,7 @@ BulletManager.prototype =
 	},
 	backgroundUpdate: function ( distanceMoved )
 	{
-		$.each( this.bullets, function () { this.backgroundUpdate( -distanceMoved ); } );
+		$.each( this.bullets, function () { this.thing.backgroundUpdate( -distanceMoved ); } );
 	},
 	getBullets: function ()
 	{
