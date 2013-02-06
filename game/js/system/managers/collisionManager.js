@@ -107,7 +107,11 @@ CollisionManager.prototype =
 		});
 		if ( !groundCollided )
 		{
-			if ( !player.falling && !player.jumping ) player.falling = true;
+			if ( !player.falling && !player.jumping ) 
+			{
+				player.falling = true;
+				player.thing.sprite.setAnim( 'fall', true );
+			}
 		}
 	},
 	update: function ( context )

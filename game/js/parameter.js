@@ -1,12 +1,12 @@
 // Constants
-var debug = true;
+var debug = false;
 
 var playerPosX = 500;
 var playerGroundOffset = 21;
 var groundY = 370;
 
 var enemyPosX = 900;
-var enemyPosY = 380;
+var enemyPosY = 365;
 
 var bulletOffsetX = 30;
 var bulletOffsetY = 12;

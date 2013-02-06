@@ -40,6 +40,6 @@ EnemyManager.prototype =
 		this.createEnemy( 'enemy1', enemyPosX, enemyPosY );
 		this.createEnemy( 'enemy1', enemyPosX + 300, enemyPosY );
 		this.createEnemy( 'enemy1', enemyPosX + 600, enemyPosY );
-		this.createEnemy( 'enemy1', enemyPosX + 450, enemyPosY - 70 );
+		this.createEnemy( 'enemy1', enemyPosX + 900, enemyPosY );
 	}
 };
