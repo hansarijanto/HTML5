@@ -30,7 +30,7 @@ Thing.prototype =
 		if ( debug == true )
 		{
 			context.fillStyle = "rgba(0,0,0,.2)";
-			if ( this.collision != undefined ) context.fillRect ( this.posX, this.posY , this.collision.left ,this.collision.top );
+			if ( this.collision != undefined ) context.fillRect ( this.posX, this.posY + this.collision.yOffset , this.collision.left ,this.collision.top - this.collision.yOffset );
 		}
 	},
 	advanceSprite: function ( time, spriteAdvanceRate )

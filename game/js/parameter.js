@@ -2,7 +2,7 @@
 var debug = false;
 
 var playerPosX = 500;
-var playerGroundOffset = 21;
+var playerGroundOffset = 80;
 var groundY = 370;
 
 var enemyPosX = 900;
