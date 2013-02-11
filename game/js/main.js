@@ -31,11 +31,11 @@ function animate( time )
 
 	context.clearRect( 0, 0, canvas.width, canvas.height );
 
-	collisionManager.update( context );
 	enemyManager.update( context, time );
 	bulletManager.update( context );
 	explosionManager.update( context, time );
 	player.update( context, time );	
+	collisionManager.update( context );	
 	
 	background.paint( context );
 	player.paint( context );
@@ -51,13 +51,12 @@ function animate( time )
 var canvas       = document.getElementById( 'canvas' ),
     context      = canvas.getContext( '2d' ),
 		player       = new Player(),
+		background 	 = new Background(),
 		
 		enemyManager     = new EnemyManager(),
 		bulletManager    = new BulletManager,		
 		explosionManager = new ExplosionManager(),
 		collisionManager = new CollisionManager(),
-		
-		background = new Background(),
 
     lastTime 			= 0,
     lastFpsUpdate = { time: 0, value: 0 },
