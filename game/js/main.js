@@ -50,6 +50,8 @@ function animate( time )
 
 var canvas       = document.getElementById( 'canvas' ),
     context      = canvas.getContext( '2d' ),
+		canvasHeight = canvas.height;
+		canvasWidth  = canvas.width;
 		player       = new Player(),
 		background 	 = new Background(),
 		

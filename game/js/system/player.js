@@ -42,6 +42,12 @@ Player.prototype =
 			if ( this.falling )
 			{
 					this.thing.posY += Math.round( this.velocityY * ( ( time - this.lastUpdate ) / 1000 ) );
+					
+					if( this.thing.posY > canvasHeight ) 
+					{
+						this.hp = 0;
+						this.die();
+					}
 			}
 		
 			// Running		
@@ -88,12 +94,13 @@ Player.prototype =
 		{
 			if ( this.deadTimer.isOver() )
 			{
+				this.thing.sprite.setAnim( 'fall', true );	
 				this.deadTimer.reset();
 				this.reset();
 				enemyManager.reset();
 				explosionManager.reset();
 				bulletManager.reset();
-				background.reset();				
+				background.reset();	
 			}
 		}
 				
@@ -204,9 +211,7 @@ Player.prototype =
 			
 			if ( this.hp <= 0 && this.alive )
 			{
-				this.alive = false;
-				this.thing.sprite.setAnim( 'dead', true );
-				this.deadTimer.start();
+				this.die();
 			}
 			else
 			{
@@ -221,8 +226,14 @@ Player.prototype =
 	{
 		this.hp = 100;
 		this.thing.posX = playerPosX;
-		this.thing.posY = playerPosY;
+		this.thing.posY = groundY - playerGroundOffset;
 		this.alive = true;
 		this.idle();
+	},
+	die: function ()
+	{
+		this.alive = false;
+		this.thing.sprite.setAnim( 'dead', true );
+		this.deadTimer.start();
 	}
 };

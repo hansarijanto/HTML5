@@ -48,5 +48,6 @@ Background.prototype =
 	{
 		this.backgroundOffset = 0;
 		this.curPosition      = 0;
+		this.groundManager.reset();
 	}
 };
