@@ -1,4 +1,6 @@
 // Controls
+var attackTimer = new AnimationTimer( 300 );
+attackTimer.start();
 
 $(document).keydown(function(event)	{
     keys[event.which] = true;
@@ -10,21 +12,18 @@ window.addEventListener("keydown", function(e)
 {	
 	if( !player.hit && player.alive )
 	{
-		// if( e.keyCode == 39 )
-		// {
-		// 	player.run( true );
-		// }
-		// if( e.keyCode == 37 )
-		// {
-		// 	player.run( false );
-		// }
 		if( e.keyCode == 38 )
 		{
 			player.jump();
 		}
 		if( e.keyCode == 32 )
 		{
-			player.attack();
+			if( attackTimer.isOver() )
+			{
+				player.attack();
+				attackTimer.reset();
+				attackTimer.start();
+			}
 		}
 	}
 }, true);

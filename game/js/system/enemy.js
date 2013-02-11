@@ -17,7 +17,7 @@ Enemy.prototype =
 {
 	thing               : null,
 	lastUpdate					: 0,
-	hp                  : 15,
+	hp                  : 30,
 	alive               : true,
 	hit                 : false,
 	
