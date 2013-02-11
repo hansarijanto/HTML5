@@ -8,7 +8,20 @@ function calculateFps( now )
 
 function animate( time ) 
 {
+	// Player Running Control
+	if( !player.hit && player.alive )
+	{
+		if ( keys[ 39 ] ) 
+		{
+			player.run( true );
+	  }
+		if ( keys[ 37 ] ) 
+		{
+			player.run( false );
+	  }
+	}
 	
+	// Animation
 	if ( time === undefined ) 
 	{
      time = +new Date;
@@ -49,6 +62,8 @@ var canvas       = document.getElementById( 'canvas' ),
     lastTime 			= 0,
     lastFpsUpdate = { time: 0, value: 0 },
     fps 					= 60;
+
+ 		keys = {};
 
 context.strokeStyle = 'lightgray';
 context.lineWidth = 0.5;

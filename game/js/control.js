@@ -1,17 +1,23 @@
 // Controls
 
+$(document).keydown(function(event)	{
+    keys[event.which] = true;
+  }).keyup(function(event){
+    delete keys[event.which];
+  });
+
 window.addEventListener("keydown", function(e) 
 {	
 	if( !player.hit && player.alive )
 	{
-		if( e.keyCode == 39 )
-		{
-			player.run( true );
-		}
-		if( e.keyCode == 37 )
-		{
-			player.run( false );
-		}
+		// if( e.keyCode == 39 )
+		// {
+		// 	player.run( true );
+		// }
+		// if( e.keyCode == 37 )
+		// {
+		// 	player.run( false );
+		// }
 		if( e.keyCode == 38 )
 		{
 			player.jump();
