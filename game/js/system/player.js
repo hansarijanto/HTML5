@@ -18,6 +18,7 @@ Player.prototype =
 	hit		 							: false,
 	hitDirection        : null,
 	alive               : true,
+	attacking           : false,
 	
 	spriteAdvanceRate   : 100,
 	

@@ -18,9 +18,10 @@ window.addEventListener("keydown", function(e)
 		}
 		if( e.keyCode == 32 )
 		{
-			if( attackTimer.isOver() )
+			if( attackTimer.isOver() && !player.attacking )
 			{
 				player.attack();
+				player.attacking = true;
 				attackTimer.reset();
 				attackTimer.start();
 			}
@@ -35,6 +36,10 @@ window.addEventListener("keyup", function(e)
 		if( e.keyCode == 37 || e.keyCode == 39 )
 		{
 			player.idle();
+		}
+		if( e.keyCode == 32 )
+		{
+			player.attacking = false;
 		}
 	}
 }, true);
