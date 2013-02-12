@@ -39,8 +39,8 @@ Background.prototype =
 			bulletManager.backgroundUpdate( distanceMoved );
 			explosionManager.backgroundUpdate( distanceMoved );
 			this.groundManager.backgroundUpdate( distanceMoved );
-			this.backgroundOffset += velocity / fps;
-			this.curPosition += velocity / fps;						
+			this.backgroundOffset += distanceMoved;
+			this.curPosition += distanceMoved;				
 		}
 	},
 	
