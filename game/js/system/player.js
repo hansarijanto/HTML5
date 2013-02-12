@@ -3,7 +3,8 @@ var Player = function ()
 	sprite    			= new getPlayerSprite();
 	collision       = new Collision( sprite.getCurCell() );
 	this.thing      = new Thing(  'player', playerPosX, groundY - playerGroundOffset, sprite, 'player', collision );	
-	this.jumpTimer  = new AnimationTimer( 500 );
+	this.jumpTimer  = new AnimationTimer( 500, AnimationTimer.makeEaseOut(1) );
+	this.fallTimer  = new AnimationTimer( 500, AnimationTimer.makeEaseIn(1) );
 	this.hitTimer   = new AnimationTimer( 300 );
 	this.deadTimer  = new AnimationTimer( 1000 );
 	
@@ -28,8 +29,10 @@ Player.prototype =
 	jumping             : false,
 	jumpTimer           : null,
 	initialJumpHeight   : 0,
+	lastJump            : 0,
 	
 	falling							: false,
+	lastFall            : 0,
 	
 	running             : false,
 	runningForward      : true,
@@ -41,7 +44,11 @@ Player.prototype =
 			// Falling
 			if ( this.falling )
 			{
-					this.thing.posY += Math.round( this.velocityY * ( ( time - this.lastUpdate ) / 1000 ) );
+				// Need to investigate Animation Timer more (Ease in)
+				var elapsed = this.fallTimer.getElapsedTime(),
+						diff    = elapsed - this.lastFall;
+				this.thing.posY += Math.round( this.velocityY * ( diff / 1000 ) );
+				this.lastFall = elapsed;
 					
 					if( this.thing.posY > canvasHeight ) 
 					{
@@ -60,13 +67,15 @@ Player.prototype =
 			// Jumping
 			if ( this.jumping )
 			{
-				this.thing.posY -= Math.round( this.velocityY * ( ( time - this.lastUpdate ) / 1000 ) );
-				if ( this.jumpTimer.isOver() )
+				// Need to investigate Animation Timer more (Ease out)
+				var elapsed = this.jumpTimer.getElapsedTime(),
+						diff    = elapsed - this.lastJump;
+						
+				this.thing.posY -= Math.round( this.velocityY * ( diff / 1000 ) );
+				this.lastJump = elapsed;
+				if ( diff < 0 )
 				{
-					this.jumping = false;
-					this.jumpTimer.reset();
-				
-					this.fall();
+					this.stopJumping();
 				}
 			}
 		
@@ -198,6 +207,7 @@ Player.prototype =
 	{
 		this.thing.sprite.setAnim( 'fall', true );
 		this.falling = true;
+		this.fallTimer.start();
 	},
 	
 	damage: function ( direction )
@@ -227,6 +237,8 @@ Player.prototype =
 		this.hp = 100;
 		this.thing.posX = playerPosX;
 		this.thing.posY = groundY - playerGroundOffset;
+		this.stopFalling();
+		this.stopJumping();
 		this.alive = true;
 		this.idle();
 	},
@@ -235,5 +247,20 @@ Player.prototype =
 		this.alive = false;
 		this.thing.sprite.setAnim( 'dead', true );
 		this.deadTimer.start();
+	},
+	stopFalling: function ()
+	{
+		this.falling = false;
+		this.jumpTimer.stop();
+		this.jumpTimer.reset();
+		this.lastFall = 0;
+	},
+	stopJumping: function ()
+	{
+		this.jumping = false;
+		this.jumpTimer.stop();
+		this.jumpTimer.reset();
+		this.fall();
+		this.lastJump = 0;
 	}
 };

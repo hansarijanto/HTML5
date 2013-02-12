@@ -103,7 +103,7 @@ CollisionManager.prototype =
 					groundCollided = true;
 					if( player.falling )
 					{
-						player.falling = false;
+						player.stopFalling();
 					
 						if ( player.running ) 
 						{
@@ -128,8 +128,7 @@ CollisionManager.prototype =
 		{
 			if ( !player.falling && !player.jumping ) 
 			{
-				player.falling = true;
-				player.thing.sprite.setAnim( 'fall', true );
+				player.fall();
 			}
 		}
 		this.prevPlayerBottomCollider = player.thing.posY + player.thing.collision.top;
