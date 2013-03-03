@@ -8,21 +8,45 @@
             background: #dddddd;
          }
 
-         #canvas {
-            position: absolute;
-            left: 0px;
-            top: 20px;
-            margin: 20px;
+         #canvas_1 {
             background: #ffffff;
-            border: thin inset rgba(100,150,230,0.5);
+/*            border: thin inset rgba(100,150,230,0.5);*/
+						position: absolute; 
+						left: 0; 
+						top: 0; 
+						z-index: 0;
          }
+         #canvas_2 {
+						position: absolute; 
+						left: 0; 
+						top: 0; 
+						z-index: 1;
+         }
+
+         #canvas_3 {
+						position: absolute; 
+						left: 0; 
+						top: 0; 
+						z-index: 2;
+         }
+
+				#wrapper{
+					position: relative;
+          left: 20px;
+          top: 20px;
+					overflow: hidden;
+				}
       </style>
    </head>
-
   <body>
-    <canvas id='canvas' width='1000' height='420'>
-      Canvas not supported
-    </canvas>
+		<div id='wrapper' style='width: 1000px; height: 420px;'>
+	    <canvas id='canvas_1' width='2000px' height='420px'>
+	      Canvas not supported
+	    </canvas>
+	    <canvas id='canvas_2' width='2000px' height='420px'>
+	      Canvas not supported
+	    </canvas>
+		</div>
 		<script src='js/jquery-1.9.0.js'></script>
 		<script src='js/parameter.js'></script>
 		<script src='js/spriteSheet.js'></script>

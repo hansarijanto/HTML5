@@ -61,8 +61,8 @@ Player.prototype =
 			// Running		
 			if ( this.running )
 			{
-				if ( this.runningForward ) background.update(  this.velocityX, context, time );
-				else 											 background.update( -this.velocityX, context, time );
+				if ( this.runningForward ) background.update(  this.velocityX, context );
+				else 											 background.update( -this.velocityX, context );
 			}
 		
 			// Jumping
@@ -127,7 +127,7 @@ Player.prototype =
 		context.save();
 		context.fillStyle = "black";
 	  context.font = "bold 16px Arial";
-	  context.fillText("Health "+this.hp, 100, 100);
+	  context.fillText("Health "+this.hp, wrapper.scrollLeft + 100, wrapper.scrollTop + 100);
 		context.restore();
 	},
 	

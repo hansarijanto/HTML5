@@ -47,7 +47,7 @@ CollisionManager.prototype =
 		else if( topCollided 		) 					return 'Top';
 		else 																return 'None'
 	},
-	checkEnemyCollision: function ()
+	checkEnemyCollision: function ( context )
 	{
 		$.each( enemyManager.getEnemies(), function () 
 		{ 
@@ -98,7 +98,7 @@ CollisionManager.prototype =
 			{
 				collisionDirection = collisionManager.collisionCheck( player, ground, context );
 				//TODO::preferably keep previous bottom collider position of player and check that for ground collider
-				if( ( collisionDirection == 'rightBottom' || collisionDirection == 'leftBottom' || collisionDirection == 'middleBottom' ) && prevPlayerBottomCollider < bottomCollider + 1 )
+				if( ( collisionDirection == 'rightBottom' || collisionDirection == 'leftBottom' || collisionDirection == 'middleBottom' ) && prevPlayerBottomCollider < bottomCollider + 0.1 )
 				{
 					groundCollided = true;
 					if( player.falling )
@@ -135,7 +135,7 @@ CollisionManager.prototype =
 	},
 	update: function ( context )
 	{
-		this.checkEnemyCollision();
+		this.checkEnemyCollision( context );
 		this.checkGroundCollision( context );
 	}
 };

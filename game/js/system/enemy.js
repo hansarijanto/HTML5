@@ -66,6 +66,7 @@ Enemy.prototype =
 	
 	reset: function ()
 	{
+		this.hp = 30;
 		this.thing.posX = this.originalPosX;
 		this.thing.posY = this.originalPosY;
 		this.alive = true;

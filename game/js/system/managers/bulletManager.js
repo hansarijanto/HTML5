@@ -23,7 +23,7 @@ BulletManager.prototype =
 
 		if ( this.bullets[0] != undefined )
 		{
-			if ( ( this.bullets[0].thing.posX - player.thing.posX ) > ( canvas.width - playerPosX ) )
+			if ( ( this.bullets[0].thing.posX - player.thing.posX ) > ( canvasWidth - playerPosX ) )
 			{
 				this.deleteBullet();
 			}
