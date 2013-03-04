@@ -22,16 +22,27 @@ Thing.prototype =
 	
 	lastSpriteAdvance		: 0,
 	
-	paint: function ( context )
+	paint: function ( context, inverse )
 	{
-		this.sprite.paint( context, this.posX, this.posY );
+		x = this.posX;
 		
+		if( inverse ) 
+		{
+			context.save();	
+			context.translate( canvasWidth, 0 );
+			context.scale( -1, 1 )
+			x = canvasWidth - x - this.collision.left;
+		}
+		
+		this.sprite.paint( context, x, this.posY );
+				
 		//painting the collider
 		if ( debug == true )
 		{
 			context.fillStyle = "rgba(0,0,0,.2)";
-			if ( this.collision != undefined ) context.fillRect ( this.posX, this.posY + this.collision.yOffset , this.collision.left ,this.collision.top - this.collision.yOffset );
+			if ( this.collision != undefined ) context.fillRect ( x, this.posY + this.collision.yOffset , this.collision.left ,this.collision.top - this.collision.yOffset );
 		}
+		if( inverse ) context.restore();
 	},
 	advanceSprite: function ( time, spriteAdvanceRate )
 	{	

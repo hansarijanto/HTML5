@@ -1,5 +1,5 @@
 // Constants
-var debug = false;
+var debug = true;
 
 var playerPosX = 500;
 var playerGroundOffset = 100;

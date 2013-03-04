@@ -120,11 +120,11 @@ Player.prototype =
 	},
 	
 	paint: function ( context )
-	{		
-		this.thing.paint( context );
+	{	
+		this.thing.paint( context, !this.runningForward );
 		
+		context.save();	
 		// TODO::testing purpose drawing health bar
-		context.save();
 		context.fillStyle = "black";
 	  context.font = "bold 16px Arial";
 	  context.fillText("Health "+this.hp, wrapper.scrollLeft + 100, wrapper.scrollTop + 100);
@@ -180,7 +180,7 @@ Player.prototype =
 			}
 		}
 		//adding new bullet
-		bulletManager.createBullet();
+		bulletManager.createBullet( this.runningForward );
 	},
 	
 	idle: function ()

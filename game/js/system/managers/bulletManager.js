@@ -9,9 +9,9 @@ BulletManager.prototype =
 	bulletSprite : null,
 	bullets  		 : null,
 	
-	createBullet: function ()
+	createBullet: function ( forward )
 	{
-		this.bullets.push( new Bullet( 'bullet_1' ) );
+		this.bullets.push( new Bullet( 'bullet_1', forward ) );
 	},
 	deleteBullet: function ()
 	{
@@ -23,9 +23,13 @@ BulletManager.prototype =
 
 		if ( this.bullets[0] != undefined )
 		{
-			if ( ( this.bullets[0].thing.posX - player.thing.posX ) > ( canvasWidth - playerPosX ) )
+			if( this.bullets[0].forward )
 			{
-				this.deleteBullet();
+				if ( ( this.bullets[0].thing.posX ) > ( wrapperWidth + wrapper.scrollLeft ) ) this.deleteBullet();
+			}
+			else
+			{
+				if ( ( this.bullets[0].thing.posX ) < ( wrapper.scrollLeft ) ) this.deleteBullet();
 			}
 		}
 	},

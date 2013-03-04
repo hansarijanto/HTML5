@@ -20,8 +20,6 @@ Background.prototype =
 {
 	backgroundImage  : new Image(),
 	imageWidth       : 0,
-	backgroundOffset : 0,
-	curPosition      : 0,
 	groundManager    : null,
 	imageCount       : 0,
 
@@ -44,14 +42,20 @@ Background.prototype =
 		{
 			player.thing.posX += distanceMoved;
 			
-			if ( player.thing.posX + distanceMoved > wrapperWidth / 2 && player.thing.posX + distanceMoved < ( canvasWidth - wrapperWidth / 2  ) ) scrollWrapper( distanceMoved, 0 );		
+			if ( player.thing.posX + distanceMoved > wrapperWidth / 2 && player.thing.posX + distanceMoved < ( canvasWidth - wrapperWidth / 2  ) ) this.scrollWrapper( distanceMoved, 0 );		
 		}
 	},
 	
 	reset: function()
 	{
-		this.backgroundOffset = 0;
-		this.curPosition      = 0;
+		wrapper.scrollTop = 0;
+		wrapper.scrollLeft = 0;
 		this.groundManager.reset();
+	},
+	
+	scrollWrapper: function( x, y )
+	{  
+	    wrapper.scrollTop += y;
+	    wrapper.scrollLeft += x;
 	}
 };

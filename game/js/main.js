@@ -11,11 +11,6 @@ function fpsPaint()
 	context_2.fillStyle = "#000000";
 	context_2.fillText( fps, wrapper.scrollLeft + 50, wrapper.scrollTop + 50 );
 }
-function scrollWrapper( x, y )
-{  
-    wrapper.scrollTop += y;
-    wrapper.scrollLeft += x;
-}
 
 function animate( time ) 
 {
