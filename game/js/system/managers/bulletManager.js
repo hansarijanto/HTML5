@@ -29,7 +29,7 @@ BulletManager.prototype =
 			}
 			else
 			{
-				if ( ( this.bullets[0].thing.posX ) < ( wrapper.scrollLeft ) ) this.deleteBullet();
+				if ( ( this.bullets[0].thing.posX ) < ( wrapper.scrollLeft - this.bullets[0].thing.collision.left ) ) this.deleteBullet();
 			}
 		}
 	},
