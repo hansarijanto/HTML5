@@ -11,7 +11,6 @@ function fpsPaint()
 	context_2.fillStyle = "#000000";
 	context_2.fillText( fps, wrapper.scrollLeft + 50, wrapper.scrollTop + 50 );
 }
-
 function animate( time ) 
 {
 	// Player Running Control
@@ -79,5 +78,3 @@ var canvas_1     = document.getElementById( 'canvas_1' ),
 if( true ) $('#log_body').show();
 context_1.strokeStyle = 'lightgray';
 context_1.lineWidth = 0.5;
-
-window.requestNextAnimationFrame( animate );

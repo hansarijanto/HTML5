@@ -41,6 +41,16 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 			}
 			$players[ $clientID ] = $m_value ;
 		}
+		else if( $m_command == 'updatePlayer' )
+		{
+			foreach ( $Server->wsClients as $id => $client )
+			{
+				if ( $id != $clientID )
+				{
+					$Server->wsSend($id, "~:updatePlayer:$m_value");
+				}
+			}
+		}
 	}
 	else
 	{
@@ -95,7 +105,6 @@ function wsOnClose($clientID, $status) {
 
 	//Send a user left notice to everyone in the room
 	$closingPlayerId = $players[ $clientID ];
-	var_dump($closingPlayerId);
 	foreach ( $Server->wsClients as $id => $client )
 	{
 		$Server->wsSend($id, "~:removePlayer:$closingPlayerId");

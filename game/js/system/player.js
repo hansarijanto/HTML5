@@ -131,13 +131,6 @@ Player.prototype =
 	{	
 		this.thing.paint( context, !this.runningForward );
 		this.bulletManager.paint( context );
-		
-		context.save();	
-		// TODO::testing purpose drawing health bar
-		context.fillStyle = "black";
-	  context.font = "bold 16px Arial";
-	  context.fillText("Health "+this.hp, wrapper.scrollLeft + 100, wrapper.scrollTop + 100);
-		context.restore();
 	},
 	
 	getCurAnimName: function ()

@@ -54,6 +54,16 @@ $(document).ready(function() {
 				log( "Player "+m_value+" has Disconnected" );
 				playerManager.removePlayer( m_value );
 			}
+			else if( m_command == 'updatePlayer')
+			{
+				var m_value_arr = m_value.split( "," );
+				var player_id = m_value_arr[0];
+				var posX      = m_value_arr[1];
+				var posY      = m_value_arr[2];
+				var rf        = m_value_arr[3];
+				var animName  = m_value_arr[4];
+				playerManager.updateOtherPlayer( player_id, posX, posY, rf, animName );
+			}
 		}
 		else
 		{
@@ -62,4 +72,5 @@ $(document).ready(function() {
 	});
 
 	Server.connect();
+	window.requestNextAnimationFrame( animate );
 });
