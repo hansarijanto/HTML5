@@ -63,7 +63,7 @@ CollisionManager.prototype =
 			
 				// Check bullet collision with enemies
 				var bulletToDelete = 0;
-				$.each( bulletManager.getBullets(), function () 
+				$.each( player.bulletManager.getBullets(), function () 
 				{
 					var bullet = this;
 					collisionDirection = collisionManager.collisionCheck( bullet, enemy, context ); 
@@ -78,7 +78,7 @@ CollisionManager.prototype =
 				{
 					for ( var i = 0; i < bulletToDelete; ++i )
 					{
-						bulletManager.deleteBullet();
+						player.bulletManager.deleteBullet();
 					}
 				}
 			}

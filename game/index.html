@@ -36,16 +36,43 @@
           top: 20px;
 					overflow: hidden;
 				}
+				
+				input, textarea { 
+					border: 1px solid #CCC;
+					margin: 0px;
+					padding: 0px
+					}
+
+				#log_body {
+					max-width: 800px;
+					padding-left: 19px;
+					padding-top: 25px;
+					display: none;
+				}
+				
+				#log {
+					width: 1000px;
+					height: 100px;
+				}
+				
+				#message {
+					width: 1000px;
+					line-height: 20px;
+				}
       </style>
    </head>
   <body>
 		<div id='wrapper' style='width: 1000px; height: 420px;'>
 	    <canvas id='canvas_1' width='2000px' height='420px'>
-	      Canvas not supported
+	      Canvas 1 not supported
 	    </canvas>
 	    <canvas id='canvas_2' width='2000px' height='420px'>
-	      Canvas not supported
+	      Canvas 2 not supported
 	    </canvas>
+		</div>
+		<div id='log_body'>
+			<textarea id='log' name='log' readonly='readonly'></textarea><br/>
+			<input type='text' id='message' name='message' />
 		</div>
 		<script src='js/jquery-1.9.0.js'></script>
 		<script src='js/parameter.js'></script>
@@ -67,12 +94,15 @@
 		<script src='js/system/managers/enemyManager.js'></script>
 		<script src='js/system/managers/explosionManager.js'></script>
 		<script src='js/system/managers/groundManager.js'></script>
+		<script src='js/system/managers/playerManager.js'></script>
 		<script src='js/spriteMaps/getPlayerSprite.js'></script>
 		<script src='js/spriteMaps/getEnemy1Sprite.js'></script>
 		<script src='js/spriteMaps/getBulletSprite.js'></script>
 		<script src='js/spriteMaps/getExplosion1Sprite.js'></script>
 		<script src='js/spriteMaps/getGroundSprite.js'></script>
     <script src='js/main.js'></script>		
+		<script src="server/fancywebsocket.js"></script>
+		<script src='js/serverHandling.js'></script>
 		<script src='js/control.js'></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-var Player = function () 
+var Player = function ( playerId, posX, posY ) 
 {	
 	sprite    			= new getPlayerSprite();
 	collision       = new Collision( sprite.getCurCell() );
@@ -8,12 +8,17 @@ var Player = function ()
 	this.hitTimer   = new AnimationTimer( 300 );
 	this.deadTimer  = new AnimationTimer( 1000 );
 	
+	this.bulletManager = new BulletManager;
+	this.playerId = playerId;
+	
 	return this;
 };
 
 Player.prototype = 
 {
+	playerId            : 0,
 	thing               : null,
+	bulletManager       : null,
 	lastUpdate					: 0,
 	hit		 							: false,
 	hitDirection        : null,
@@ -42,6 +47,9 @@ Player.prototype =
 	{
 		if ( this.alive )
 		{
+			// Update Bullets
+			this.bulletManager.update( context );
+				
 			// Falling
 			if ( this.falling )
 			{
@@ -109,7 +117,7 @@ Player.prototype =
 				this.reset();
 				enemyManager.reset();
 				explosionManager.reset();
-				bulletManager.reset();
+				this.bulletManager.reset();
 				background.reset();	
 			}
 		}
@@ -122,6 +130,7 @@ Player.prototype =
 	paint: function ( context )
 	{	
 		this.thing.paint( context, !this.runningForward );
+		this.bulletManager.paint( context );
 		
 		context.save();	
 		// TODO::testing purpose drawing health bar
@@ -180,7 +189,7 @@ Player.prototype =
 			}
 		}
 		//adding new bullet
-		bulletManager.createBullet( this.runningForward );
+		this.bulletManager.createBullet( this.runningForward );
 	},
 	
 	idle: function ()
